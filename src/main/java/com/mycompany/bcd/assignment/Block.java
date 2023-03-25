@@ -5,24 +5,31 @@
  */
 package com.mycompany.bcd.assignment;
 
+import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
+
 /**
  *
  * @author gregoriuskevin
  */
 public class Block {
     
-    public Header header;
-    public Block(String prevHash) {
-        header = new Header();
+    public int index;
+    public String currHash, prevHash;
+    public long timestamp;
+    public Transaction trans;
+    Hashing h = new Hashing();
+    
+    public Block(String prevHash) throws NoSuchAlgorithmException {
+        setTimestamp( new Timestamp(System.currentTimeMillis()).getTime() );
+        setPrevHash(prevHash);
+        String input = String.join("+", Integer.toString(getIndex()), Long.toString(getTimestamp()), getPrevHash());
+        String block = h.hash(input);
+        setCurrHash( block );
         
     }
     
-    public class Header {
-        //private static final long serialVersionUID = 1L ;
-        public int index;
-        public String currHash, prevHash;
-        public long timestamp;
-        
+
         public int getIndex(){
             return index;
         }
@@ -54,6 +61,18 @@ public class Block {
         public void setTimeStamp(long timestamp){
             this.timestamp = timestamp;
         }
+
+        private void setTimestamp(long time) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+        
+        public Transaction getTrans(){
+            return trans;
+        }
+        
+        public void setTrans(){
+            this.trans=trans;
+        }
     }
     
-}
+

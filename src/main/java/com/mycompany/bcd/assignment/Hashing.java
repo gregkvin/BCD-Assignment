@@ -15,8 +15,9 @@ import java.security.NoSuchAlgorithmException;
  */
 public class Hashing {
     
-    public static String hash (String input, String algo) throws NoSuchAlgorithmException{
-        MessageDigest md = MessageDigest.getInstance(algo);
+
+    public static String hash (String input) throws NoSuchAlgorithmException{
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
         md.update(input.getBytes());
         byte[] hashBytes = md.digest();
         StringBuilder sb = new StringBuilder();
