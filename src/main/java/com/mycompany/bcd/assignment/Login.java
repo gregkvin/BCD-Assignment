@@ -306,6 +306,7 @@ public class Login extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }*/
+        new Admin_Menu().setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -339,6 +340,11 @@ public class Login extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }*/
+         jLabel3.setVisible(true);
+                jButton3.setVisible(false);
+                jButton1.setVisible(true);
+                username.setEditable(false);
+                password.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
