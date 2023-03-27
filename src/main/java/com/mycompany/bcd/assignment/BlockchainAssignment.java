@@ -5,6 +5,9 @@
  */
 package com.mycompany.bcd.assignment;
 
+import Blockchain.Blockchain;
+import LoginUI.MainMenu;
+
 /**
  *
  * @author gregoriuskevin
