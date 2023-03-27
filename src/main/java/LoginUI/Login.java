@@ -1,6 +1,7 @@
 package LoginUI;
 
 import AdminUI.Admin_Menu;
+import UserUI.User_Menu;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.IOException;
@@ -341,11 +342,13 @@ public class Login extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }*/
-         jLabel3.setVisible(true);
+         /*jLabel3.setVisible(true);
                 jButton3.setVisible(false);
                 jButton1.setVisible(true);
                 username.setEditable(false);
-                password.setVisible(true);
+                password.setVisible(true);*/
+         dispose();
+         new User_Menu().setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

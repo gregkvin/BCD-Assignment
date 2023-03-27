@@ -19,10 +19,10 @@ import javax.swing.JOptionPane;
  */
 public class User_Menu extends javax.swing.JFrame {
 
-    public User_Menu(String user1) {
+    public User_Menu() {
         initComponents();
         setResizable(false);
-        jMenu1.setText(user1);
+        //jMenu1.setText(user1);
     }
     
     private void logout() throws IOException{
@@ -247,7 +247,13 @@ public class User_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            dispose();
+            new User_Course().setVisible(true);
+        } catch (IOException ex) {
+            Logger.getLogger(User_Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
   
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -289,7 +295,7 @@ public class User_Menu extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 String user1 = null;
-                new User_Menu(user1).setVisible(true);
+                new User_Menu().setVisible(true);
             }
         });
     }
