@@ -5,75 +5,86 @@
  */
 package Blockchain;
 
-import Hashing.Hashing;
-import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
+import java.io.Serializable;
+import Hashing.Hasher;
 
 /**
  *
- * @author gregoriuskevin
+ * @author putubgs
  */
-public class Block {
-    
-    public int index;
-    public String currHash, prevHash;
-    public long timestamp;
-    public Transaction trans;
-    Hashing h = new Hashing();
-    
-    public Block(String prevHash) throws NoSuchAlgorithmException {
-        setTimestamp( new Timestamp(System.currentTimeMillis()).getTime() );
-        setPrevHash(prevHash);
-        String input = String.join("+", Integer.toString(getIndex()), Long.toString(getTimestamp()), getPrevHash());
-        String block = h.hash(input);
-        setCurrHash( block );
-        
+public class Block implements Serializable{
+    public Header blockHeader;
+    public Header getBlockHeader() {
+        return blockHeader;
     }
-    
-
-        public int getIndex(){
-            return index;
+    /* composition relationship */
+    public Block(int index, String previousHash) {
+        super();
+        long now = System.currentTimeMillis();
+        /* construct part object upon object construction */
+        this.blockHeader = new Header();
+        this.blockHeader.setPreviousHash(previousHash);
+        this.blockHeader.setTimestamp(now);
+        //hashing with sha256 - the input is joined with previousHash+now
+        String currentHash = Hasher.sha256( 
+                String.join("+", previousHash, String.valueOf(now)) );
+        this.blockHeader.setCurrentHash(currentHash);
+        System.out.println(Hasher.sha256(String.valueOf(now)));
+    }
+    /* composition relationship - inner class definition for part object*/
+    public class Header implements Serializable{
+        //data member
+        private int index;
+        private String currentHash, previousHash;
+        private long timestamp;
+        
+        @Override
+        public String toString() {
+            return "Header [index=" + index + ", currentHash=" + currentHash + ", previousHash=" + previousHash
+                    + ", timestamp=" + timestamp + "]";
         }
         
-        public String getCurrHash(){
-            return currHash;
-        } 
-        
-        public String getPrevHash(){
-            return prevHash;
+        //getset methods
+        public String getCurrentHash() {
+            return currentHash;
         }
-        
-        public long getTimestamp(){
+        public void setCurrentHash(String currentHash) {
+            this.currentHash = currentHash;
+        }
+        public String getPreviousHash() {
+            return previousHash;
+        }
+        public void setPreviousHash(String previousHash) {
+            this.previousHash = previousHash;
+        }
+        public long getTimestamp() {
             return timestamp;
         }
-        
-        public void setIndex(int index){
-            this.index = index;
-        }
-        
-        public void setCurrHash(String currHash){
-            this.currHash = currHash;
-        }
-        
-        public void setPrevHash(String prevHash){
-            this.prevHash = prevHash;
-        }
-        
-        public void setTimeStamp(long timestamp){
+        public void setTimestamp(long timestamp) {
             this.timestamp = timestamp;
         }
+        public void setIndex(int index) {
+            this.index = index;
+        }
 
-        private void setTimestamp(long time) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
         
-        public Transaction getTrans(){
-            return trans;
-        }
-        
-        public void setTrans(){
-            this.trans=trans;
-        }
     }
     
-
+    /* aggregation relationship */
+    public Blockchain.Transaction tranxLst;
+    public void setTranxLst(Transaction tranxLst) {
+        this.tranxLst = tranxLst;
+        if (tranxLst != null) {
+            tranxLst.calculateMerkleRoot();
+        }
+    }
+    @Override
+    public String toString() {
+        if (tranxLst != null) {
+            tranxLst.calculateMerkleRoot();
+        }
+        return "Block [blockHeader=" + blockHeader + ", tranxLst=" + tranxLst + "]";
+    }
+    
+    
+}

@@ -1,39 +1,37 @@
 package Blockchain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /**
  *
- * @author gregoriuskevin
+ * @author putubgs
  */
-public class Transaction {
-    public static final int SIZE = 10;
-    public List<String> trans;
+public class Transaction implements Serializable{
+    private final int SIZE = 10;
     
-    public List<String> getTranxLst() {
-		return trans;
-	}
+    /* we will come back for creating merkle root in another session */
+    private String merkleRoot = "0";
+    
+    private List<String> dataLst = new ArrayList<>();
+    
+    public void add(String tranx) {
+        if (dataLst.size() < SIZE) {
+            dataLst.add(tranx);
+            calculateMerkleRoot();
+        }
+    }
 
-    
-    public Transaction(){
-        trans = new ArrayList<>(SIZE);
+    public void calculateMerkleRoot() {
+        MerkleTree merkleTree = MerkleTree.getInstance(dataLst);
+        merkleTree.build();
+        this.merkleRoot = merkleTree.getRoot();
     }
     
-    	public void add( String tranx ) {
-		trans.add(tranx);
-	}
-	
-	@Override
-	public String toString() {
-		return "Transaction [tranxLst=" + trans + "]";
-	}
+    @Override
+    public String toString() {
+        return "Transaction [SIZE=" + SIZE + ", merkleRoot=" + merkleRoot + ", dataLst=" + dataLst + "]";
+    }
     
 }

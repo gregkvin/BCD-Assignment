@@ -5,55 +5,74 @@
  */
 package Blockchain;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import static java.lang.System.in;
-import java.security.NoSuchAlgorithmException;
-import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
- * @author gregoriuskevin
+ * @author putubgs
  */
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.LinkedList;
+import com.google.gson.GsonBuilder;
+
 public class Blockchain {
-    
-    private static LinkedList<Block> blockch = new LinkedList<>();
-    private String ledgerFile = "login.txt";
-    
-    public void genesis() throws NoSuchAlgorithmException, IOException{
-        Block gen = new Block("0");
-        blockch.add(gen);
-        write();
+    private static LinkedList<Blockchain.Block> db = new LinkedList<>();
+    private static Blockchain _instance;
+    public static Blockchain getInstance( String chainFile ) {
+        if(_instance == null)
+            _instance = new Blockchain( chainFile );
+        return _instance;
     }
     
-    public void nextBlock(Block newBlock) throws IOException{
-        newBlock.setIndex(blockch.getLast().getIndex());
-        blockch.add(newBlock);
-        write();
+    public String chainFile;
+    public Blockchain(String chainFile) {
+        super();
+        this.chainFile = chainFile;
+        System.out.println( "> Blockchain object is created!" );
     }
     
-    public LinkedList<Block> read() throws IOException{
-        try {
-            FileInputStream fin = new FileInputStream(this.ledgerFile);
-            ObjectInputStream oin = new ObjectInputStream(fin);
-            return (LinkedList<Block>)oin.readObject();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Blockchain.class.getName()).log(Level.SEVERE, null, ex);
+    public void genesis()
+    {
+        lab4.Block genesis = new lab4.Block("0");
+        db.add(genesis);
+        persist();
+    }
+    
+    public void nextBlock(lab4.Block newBlock)
+    {
+        db = get();
+        db.add(newBlock);
+        persist();
+    }
+    
+    public LinkedList<lab4.Block> get()
+    {
+        try( FileInputStream fin = new FileInputStream( this.chainFile ); 
+             ObjectInputStream in = new ObjectInputStream( fin );
+            ) {
+            return (LinkedList<lab4.Block>)in.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
     
-    public void write() throws IOException{
-        try (FileOutputStream fout = new FileOutputStream(this.ledgerFile);
-                ObjectOutputStream oout = new ObjectOutputStream(fout);){
-            oout.writeObject(blockch);
-        } catch (Exception e){
+    private void persist()
+    {
+        try( FileOutputStream fout = new FileOutputStream( this.chainFile );
+             ObjectOutputStream out = new ObjectOutputStream( fout );
+            ) {
+            out.writeObject(db);
+            System.out.println( ">> Master file is updated!" );
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    /**     * distribute()     */
+    public void distribute(){
+        String chain = new GsonBuilder().setPrettyPrinting().create().toJson(db);
+        System.out.println(chain);
     }
 }
