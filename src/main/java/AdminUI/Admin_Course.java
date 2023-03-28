@@ -6,6 +6,7 @@
 package AdminUI;
 
 import LoginUI.Login;
+import com.mycompany.bcd.assignment.FileHandle;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,19 +22,37 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Admin_Course extends javax.swing.JFrame {
 
+    FileHandle fh = new FileHandle();
+    CourseRecord cr = new CourseRecord();
+    
     public Admin_Course() throws IOException {
         initComponents();
         loadtable();
         setResizable(false);
 
     }
-
-  
-    
-
     
     private void loadtable() throws IOException{
-
+        String path = "course.txt";
+        int line = fh.readLineNumber(path), n=0;
+        DefaultTableModel model = (DefaultTableModel)(courses.getModel());
+        model.setRowCount(0);
+        try {
+            String[] id = cr.readID(path);
+            String[] name = cr.readName(path); 
+            String [] grade = cr.readPassingGrade(path);
+            String[] desc = cr.readDesc(path);
+            
+            while(n < line){
+                model.addRow(new Object[]{id[n], name[n], grade[n], desc[n]});
+                n=n+1;
+            }
+            
+            courses.setModel(model);
+            
+        } catch (Exception e){
+            
+        }
         
     }
     
@@ -70,8 +89,9 @@ public class Admin_Course extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        centreeee = new javax.swing.JTable();
+        courses = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
+        jButton7 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -108,8 +128,8 @@ public class Admin_Course extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        centreeee.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        centreeee.setModel(new javax.swing.table.DefaultTableModel(
+        courses.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        courses.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -128,16 +148,26 @@ public class Admin_Course extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        centreeee.addMouseListener(new java.awt.event.MouseAdapter() {
+        courses.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                centreeeeMouseClicked(evt);
+                coursesMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(centreeee);
+        jScrollPane1.setViewportView(courses);
 
         jLabel2.setFont(new java.awt.Font("Poppins", 2, 10)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 102, 51));
         jLabel2.setText("• BLOCKCHAIN E-CERTIFICATE SYSTEM");
+
+        jButton7.setBackground(new java.awt.Color(255, 255, 255));
+        jButton7.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        jButton7.setForeground(new java.awt.Color(0, 102, 51));
+        jButton7.setText("Back");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -146,11 +176,14 @@ public class Admin_Course extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 906, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addGap(0, 724, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)))
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -158,9 +191,11 @@ public class Admin_Course extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 303, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton7, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(18, 18, 18))
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -259,9 +294,16 @@ public class Admin_Course extends javax.swing.JFrame {
 //        }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    private void centreeeeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_centreeeeMouseClicked
+    private void coursesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_coursesMouseClicked
         
-    }//GEN-LAST:event_centreeeeMouseClicked
+    }//GEN-LAST:event_coursesMouseClicked
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        dispose();
+        String user1 = jMenu1.getText();
+        new Admin_Menu(user1).setVisible(true);
+    }//GEN-LAST:event_jButton7ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -335,8 +377,9 @@ public class Admin_Course extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable centreeee;
+    private javax.swing.JTable courses;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

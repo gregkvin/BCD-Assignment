@@ -1,15 +1,26 @@
 package LoginUI;
 
+import AdminUI.AdminRecord;
 import AdminUI.Admin_Menu;
+import Cryptography.Asymmetric;
+import Hashing.Hasher;
+import Hashing.Salt;
 import UserUI.User_Menu;
+import com.mycompany.bcd.assignment.FileHandle;
 import java.awt.Color;
 import java.awt.Font;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.NoSuchPaddingException;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -27,6 +38,7 @@ import javax.swing.UIManager;
  */
 public class Login extends javax.swing.JFrame {
     private String user, pass;
+    FileHandle fh = new FileHandle();
     
     public String getUser(){
         return user;
@@ -44,7 +56,7 @@ public class Login extends javax.swing.JFrame {
         pass = passwrd;
     }
     
-    public boolean checkUser(String user, String[]usernamee, String[] level, int line){
+    public boolean checkUser(String user, String[] usernamee, int line){
         for(int n=0; n < line; n++){
            if(user.equals(usernamee[n])){
                return true;
@@ -52,6 +64,23 @@ public class Login extends javax.swing.JFrame {
         } 
         }
         return false;
+    }
+    
+        public boolean checkPass(String[] usernamee, String username, 
+        String pass, String[]passwordd) throws IOException{
+        int nos = 0;
+        Hasher h = new Hasher();
+        int no = userIndex(usernamee, username);
+        System.out.println(pass);
+        String hashedPass = h.sha256(pass);
+        System.out.println(passwordd[no]);
+        System.out.println(hashedPass);
+        if(hashedPass.equals(passwordd[no])){
+            return true;
+        } 
+       
+            return false;
+    
     }
     
     public int userIndex (String[]usernamee, String username){
@@ -66,19 +95,7 @@ public class Login extends javax.swing.JFrame {
         return -1;
     
     }
-    public int checkPass(String[] usernamee, String username, 
-            String pass, String[]passwordd, String[] level, int line){
-        int nos = 0;
-        int no = userIndex(usernamee, username);
-        if(pass.equals(passwordd[no]) && level[no].equals("Personnel")){
-            return 1;
-        } else if (pass.equals(passwordd[no]) && level[no].equals("People")){
-            return 2;
-        }
-        else {
-            return 0;
-    }
-    }
+
     
     
     /**
@@ -168,6 +185,12 @@ public class Login extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Poppins", 0, 10)); // NOI18N
         jLabel3.setText("Password");
 
+        password.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passwordActionPerformed(evt);
+            }
+        });
+
         jButton2.setBackground(new java.awt.Color(255, 255, 255));
         jButton2.setFont(new java.awt.Font("Poppins", 0, 10)); // NOI18N
         jButton2.setText("Back");
@@ -248,67 +271,41 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_usernameActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        /*Login lo = new Login();
-        FileWrite fh = new FileWrite();
-        User read = new User();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
-        LocalDateTime now = LocalDateTime.now();  
-
-        String path = "login.txt";
-        try {
-            int line = fh.readLineNumber(path);
-            String[] usernamee = read.readUsername(path);
-            String usernme = username.getText();
-            String[] passwordd = read.readPass(path);
-            String[] date = read.readDOB(path);
-            String [] datedose1 = read.readFirstDate(path);
-            String [] datedose2 = read.readSecondDate(path);
-            String [] statusdose1 = read.readFirstStatus(path);
-             String [] statusdose2 = read.readSecondStatus(path);
-            int n = userIndex(usernamee, usernme);
-            String dob = date[n];
-            String passwrd = String.valueOf(password.getPassword());
-            String[] level = read.readLevel(path);
-            lo.setUser(usernme);
-            lo.setPass(passwrd);
-            
-            int boo = lo.checkPass(usernamee, lo.getUser(), lo.getPass(), passwordd, level, line);
-            if(boo == 1) {
-                String user1 = lo.getUser();
+        try {                                         
+            // TODO add your handling code here:
+            Login lo = new Login();
+            FileHandle fh = new FileHandle();
+            AdminRecord ar = new AdminRecord();
+            Hasher h = new Hasher();
+            byte[] salt = Salt.generate();
+            String path = "admin.txt";
+            String[] usernamee = ar.readUsername(path);
+            String[] passwordd = ar.readPassword(path);
+            //User read = new User();
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+            boolean boo = lo.checkPass(usernamee, username.getText(),String.valueOf(password.getPassword()), passwordd);
+            System.out.println(boo);
+            if(boo == true) {
+                String user1 = username.getText();
                 String[] input = {user1, "User login successful.", dtf.format(now)};
-                fh.LoggingActivity(input);
+                //fh.LoggingActivity(input);
                 dispose();
                 JOptionPane.showMessageDialog(null, "Login successfully, please proceed!");
-                new Personnel_Menu(user1).setVisible(true);
-                
-            } else if(boo == 2){
-                String user1 = lo.getUser();
-                String pass1 = lo.getPass();
-                dispose();
-                
-                String[] input = {user1, "User login successful.", dtf.format(now)}; fh.LoggingActivity(input);
-                JOptionPane.showMessageDialog(null, "Login successfully, please proceed!"); 
-                if(lo.getPass().equals(dob)){
-                    JOptionPane.showMessageDialog(null, "Please change your password immediately.", "Warning",
-                    JOptionPane.WARNING_MESSAGE);
-                    }
-                   new People_Menu(user1).setVisible(true);
-                   if(statusdose1[n].equalsIgnoreCase("No") && !datedose1[n].equals("TBA") ||
-                           statusdose2[n].equalsIgnoreCase("No") && !datedose2[n].equals("TBA")){
-                     JOptionPane.showMessageDialog(null, "Vaccination appointment updated!\n"
-                             + "Please confirm or cancel your appointment immediately!", "Warning",
-                    JOptionPane.WARNING_MESSAGE);  
-                   }
+                new Admin_Menu(user1).setVisible(true);
                 
             }
+            
             else {
-                JOptionPane.showMessageDialog(null, "Invalid password");
+                JOptionPane.showMessageDialog(null, "Invalid password", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (IOException ex) {
-            Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }*/
-        new Admin_Menu().setVisible(true);
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -319,17 +316,20 @@ public class Login extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         
-        /*Login lo = new Login();
-        FileWrite fh = new FileWrite();
-        User read = new User();
-        String path = "login.txt";
+        Login lo = new Login(); /*jLabel3.setVisible(true);
+        jButton3.setVisible(false);
+        jButton1.setVisible(true);
+        username.setEditable(false);
+        password.setVisible(true);*/
+        FileHandle fh = new FileHandle();
+        AdminRecord ar = new AdminRecord();
+        String path = "admin.txt";
         try {
             int line = fh.readLineNumber(path);
-            String[] usernamee = read.readUsername(path);
+            String[] usernamee = ar.readUsername(path);
             String usernme = username.getText();
-            String[] level = read.readLevel(path);
             lo.setUser(usernme);
-            boolean boo = lo.checkUser(lo.getUser(), usernamee, level, line);
+            boolean boo = lo.checkUser(lo.getUser(), usernamee, line);
             if(boo == true) {
                 jLabel3.setVisible(true);
                 jButton3.setVisible(false);
@@ -341,15 +341,21 @@ public class Login extends javax.swing.JFrame {
             }
         } catch (IOException ex) {
             Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }*/
-         /*jLabel3.setVisible(true);
-                jButton3.setVisible(false);
-                jButton1.setVisible(true);
-                username.setEditable(false);
-                password.setVisible(true);*/
-         dispose();
-         new User_Menu().setVisible(true);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        /*jLabel3.setVisible(true);
+        jButton3.setVisible(false);
+        jButton1.setVisible(true);
+        username.setEditable(false);
+        password.setVisible(true);*/
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void passwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_passwordActionPerformed
 
     /**
      * @param args the command line arguments

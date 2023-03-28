@@ -4,6 +4,9 @@
  */
 package Hashing;
 
+import com.mycompany.bcd.assignment.FileHandle;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.SecureRandom;
 
 /**
@@ -19,5 +22,14 @@ public class Salt {
         SecureRandom sr = new SecureRandom();
         sr.nextBytes(b);
         return b;
+    }
+    
+    public static void main(String [] args) throws IOException{
+        FileHandle fh = new FileHandle();
+        PrintWriter pr = fh.setAppend("salt.txt");
+        byte [] salt = generate();
+        pr.print(salt);
+        pr.flush();
+        pr.close();
     }
 }

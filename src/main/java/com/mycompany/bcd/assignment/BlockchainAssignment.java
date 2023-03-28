@@ -5,8 +5,10 @@
  */
 package com.mycompany.bcd.assignment;
 
-import Blockchain.Blockchain;
+//import Blockchain.Blockchain;
+import KeyGenerator.KeyMaker;
 import LoginUI.MainMenu;
+import java.security.NoSuchAlgorithmException;
 
 /**
  *
@@ -17,9 +19,11 @@ public class BlockchainAssignment {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NoSuchAlgorithmException {
         // TODO code application logic here
-        Blockchain bc;
+        
+        //Blockchain bc;
+        
         MainMenu form = new MainMenu();
         form.setVisible(true);
     }
