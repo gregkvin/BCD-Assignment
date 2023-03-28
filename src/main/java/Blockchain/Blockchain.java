@@ -32,21 +32,23 @@ public class Blockchain {
         System.out.println( "> Blockchain object is created!" );
     }
     
-    public void genesis()
-    {
-        lab4.Block genesis = new lab4.Block("0");
+    public void genesis() {
+        Blockchain.Block genesis = new Blockchain.Block(0, "0");
         db.add(genesis);
         persist();
     }
+
     
-    public void nextBlock(lab4.Block newBlock)
-    {
+    public void nextBlock(Blockchain.Block newBlock) {
         db = get();
+        int newIndex = db.size(); // Get the size of the current blockchain
+        newBlock.getBlockHeader().setIndex(newIndex); // Set the new index value for the block
         db.add(newBlock);
         persist();
     }
+
     
-    public LinkedList<lab4.Block> get()
+    public LinkedList<Blockchain.Block> get()
     {
         try( FileInputStream fin = new FileInputStream( this.chainFile ); 
              ObjectInputStream in = new ObjectInputStream( fin );
