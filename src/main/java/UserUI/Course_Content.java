@@ -6,35 +6,145 @@
 package UserUI;
 
 import AdminUI.*;
+import Class.Course;
+import Cryptography.Symmetric;
 import LoginUI.Login;
+import com.mycompany.bcd.assignment.FileHandle;
+import java.awt.Component;
+import java.awt.Font;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.spec.SecretKeySpec;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 /**
  *
  * @author gregoriuskevin
  */
 public class Course_Content extends javax.swing.JFrame {
+    
+    FileHandle fh = new FileHandle();
+    CourseRecord cr = new CourseRecord();
+    String path = "course.txt";
+    
+    class HeaderRenderer extends JLabel implements TableCellRenderer {
+
+        public HeaderRenderer() {
+            setOpaque(true);
+            setHorizontalAlignment(CENTER); // Set the alignment to center
+            setVerticalAlignment(CENTER);
+            setFont(new Font("Tahoma", Font.BOLD, 12));
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            setText(value.toString());
+            setBackground(table.getTableHeader().getBackground());
+            setForeground(table.getTableHeader().getForeground());
+            return this;
+        }
+    }
+    
+    class CenterRenderer extends DefaultTableCellRenderer {
+        public CenterRenderer() {
+            super();
+            setHorizontalAlignment(JLabel.CENTER); // Set the alignment to center
+        }
+    }
 
     public Course_Content() throws IOException {
         initComponents();
         loadtable();
         setResizable(false);
+        jTable1.getTableHeader().setDefaultRenderer(new HeaderRenderer());
+        CenterRenderer centerRenderer = new CenterRenderer();
+        jTable1.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        jTable1.setDefaultEditor(Object.class, null);
+        
+        // Disable the button initially
+        jButton3.setEnabled(false);
 
+        // Add a ListSelectionListener to jTable1's selection model
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    if (jTable1.getSelectedRow() != -1) {
+                        jButton3.setEnabled(true);
+                    } else {
+                        jButton3.setEnabled(false);
+                    }
+                }
+            }
+        });
     }
 
   
-    
+    private String decryptString(String encryptedString, String base64Key) throws Exception {
+        byte[] decodedKeyBytes = Base64.getDecoder().decode(base64Key);
+        SecretKeySpec originalKey = new SecretKeySpec(decodedKeyBytes, "AES");
+        Symmetric s = new Symmetric();
+        return s.decrypt(encryptedString, originalKey);
+    }
 
+    private List<Course> courses = new ArrayList<>();
     
     private void loadtable() throws IOException{
 
+
+        int line = fh.readLineNumber(path), n = 0;
+        DefaultTableModel mod = (DefaultTableModel)(jTable1.getModel());
+        mod.setRowCount(0);
+        try {
+            String[] id = cr.readID(path);
+            String[] name = cr.readName(path); 
+            String[] grade =  cr.readPassingGrade(path);
+            String [] explanation = cr.readEx(path);
+            String[] question =  cr.readQuestion(path);
+            String[] answer1 =  cr.readAnswer1(path);
+            String[] answer2 =  cr.readAnswer2(path);
+            String[] answer3 =  cr.readAnswer3(path);
+            String[] answer4 =  cr.readAnswer4(path);
+            
+            while(n < line){
+                String keyPath = "courseKey.txt";
+                String base64Key = fh.getKeyById(keyPath, id[n]);
+            
+                String decryptedName = decryptString(name[n], base64Key);
+                String decryptedGrade = decryptString(grade[n], base64Key);
+                String decryptedExplanation = decryptString(explanation[n], base64Key);
+                String decryptedQuestion = decryptString(question[n], base64Key);
+                String decryptedAnswer1 = decryptString(answer1[n], base64Key);
+                String decryptedAnswer2 = decryptString(answer2[n], base64Key);
+                String decryptedAnswer3 = decryptString(answer3[n], base64Key);
+                String decryptedAnswer4 = decryptString(answer4[n], base64Key);
+                                                                
+                mod.addRow(new Object[]{decryptedName});
+                
+                Course c = new Course(id[n], decryptedName, decryptedGrade, decryptedExplanation, 
+                    decryptedQuestion, decryptedAnswer1, decryptedAnswer2, decryptedAnswer3, decryptedAnswer4);
+                courses.add(c);
+                n = n + 1;
+            }
+        
+            jTable1.setModel(mod);
+        
+        } catch (Exception e){
+            
+        }
         
     }
     
@@ -71,16 +181,11 @@ public class Course_Content extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        guide1 = new javax.swing.JLabel();
         date1 = new javax.swing.JLabel();
-        guide2 = new javax.swing.JLabel();
-        time1 = new javax.swing.JLabel();
-        guide3 = new javax.swing.JLabel();
-        venue1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -121,33 +226,9 @@ public class Course_Content extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 102, 51));
         jLabel2.setText("• BLOCKCHAIN E-CERTIFICATE SYSTEM");
 
-        guide1.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        guide1.setForeground(new java.awt.Color(0, 102, 51));
-        guide1.setText("Course ID");
-
         date1.setFont(new java.awt.Font("Poppins", 1, 24)); // NOI18N
         date1.setForeground(new java.awt.Color(0, 102, 51));
-        date1.setText("Introduction to Blockchain");
-
-        guide2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        guide2.setForeground(new java.awt.Color(0, 102, 51));
-        guide2.setText("Passing Grade");
-
-        time1.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
-        time1.setForeground(new java.awt.Color(0, 102, 51));
-        time1.setText("#0001");
-
-        guide3.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        guide3.setForeground(new java.awt.Color(0, 102, 51));
-        guide3.setText("Description");
-
-        venue1.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
-        venue1.setForeground(new java.awt.Color(0, 102, 51));
-        venue1.setText("60");
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        date1.setText("Pick Your Course!");
 
         jButton2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 102, 1));
@@ -167,65 +248,69 @@ public class Course_Content extends javax.swing.JFrame {
             }
         });
 
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null},
+                {null},
+                {null},
+                {null}
+            },
+            new String [] {
+                "Course Title"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(jTable1);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel2))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(63, 63, 63)
-                        .addComponent(date1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(date1)
+                        .addGap(128, 128, 128))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(95, 95, 95)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(guide2)
-                                    .addComponent(guide1)
-                                    .addComponent(guide3))
-                                .addGap(43, 43, 43))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addContainerGap()
+                                .addComponent(jLabel2))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(80, 80, 80)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(131, 131, 131)
                                 .addComponent(jButton2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton3)
-                            .addComponent(time1)
-                            .addComponent(venue1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                                .addGap(55, 55, 55)
+                                .addComponent(jButton3)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)))
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(49, 49, 49)
+                .addContainerGap(36, Short.MAX_VALUE)
                 .addComponent(date1)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(guide1)
-                    .addComponent(time1))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(guide2)
-                    .addComponent(venue1))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(guide3)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(15, 15, 15)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18))
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jLabel3.setText("jLabel3");
@@ -330,7 +415,24 @@ public class Course_Content extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        int selectedRow = jTable1.getSelectedRow();
 
+        if (selectedRow != -1) {
+            try {
+                // Get the Course object from the list using the selected row index
+                Course c = courses.get(selectedRow);
+
+                // Do whatever you want with the Course object here
+                System.out.println(c.toString());
+                dispose();
+                new User_Course(c).setVisible(true);
+
+            } catch (Exception ex) {
+                // Handle exceptions if needed
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Please select a row in the table.");
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
@@ -630,9 +732,6 @@ public class Course_Content extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel date1;
-    private javax.swing.JLabel guide1;
-    private javax.swing.JLabel guide2;
-    private javax.swing.JLabel guide3;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -651,9 +750,7 @@ public class Course_Content extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JLabel time1;
-    private javax.swing.JLabel venue1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

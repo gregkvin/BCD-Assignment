@@ -25,6 +25,8 @@ public class Course_Register extends javax.swing.JFrame {
     FileHandle fh = new FileHandle();
     public Course_Register() throws IOException, NoSuchAlgorithmException, NoSuchPaddingException {
         initComponents();
+        explanation.setLineWrap(true);
+        explanation.setWrapStyleWord(true);
         setResizable(false);
         setAuto();
 //        jMenu1.setText(user1);
@@ -400,15 +402,21 @@ public class Course_Register extends javax.swing.JFrame {
                 ||answer2.getText().equals("")||answer3.getText().equals("")||answer4.getText().equals("")){
             JOptionPane.showMessageDialog(null, "Incomplete credentials, you have not fill one or more information.", "Error!", JOptionPane.ERROR_MESSAGE);
         } else {
-            try {
-                CourseRecord cr = new CourseRecord();
-                cr.registerCourse(id.getText(),name.getText(),passingGr.getText(), explanation.getText(), question.getText(), answer1.getText(), answer2.getText(), answer3.getText(), answer4.getText());
-                JOptionPane.showMessageDialog(null, "Saved successfully!");
-                dispose();
-                String user1 = jMenu1.getText();
-                new Admin_Menu(user1).setVisible(true);
-            } catch (Exception ex) {
-                Logger.getLogger(Course_Register.class.getName()).log(Level.SEVERE, null, ex);
+            String passingGrText = passingGr.getText();
+            if (passingGrText.matches("\\d+") && Integer.parseInt(passingGrText) >= 1 && Integer.parseInt(passingGrText) <= 100) {
+                try {
+                    CourseRecord cr = new CourseRecord();
+                    cr.registerCourse(id.getText(),name.getText(),passingGr.getText(), explanation.getText(), question.getText(), answer1.getText(), answer2.getText(), answer3.getText(), answer4.getText());
+                    JOptionPane.showMessageDialog(null, "Saved successfully!");
+                    dispose();
+                    String user1 = jMenu1.getText();
+                    new Admin_Menu(user1).setVisible(true);
+                } catch (Exception ex) {
+                    Logger.getLogger(Course_Register.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+            // Show an error message if the input is not valid
+            JOptionPane.showMessageDialog(null, "Invalid passing grade. Please enter a number between 1 and 100.", "Error!", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_jButton3ActionPerformed

@@ -6,14 +6,20 @@
 package UserUI;
 
 import AdminUI.*;
+import Class.Course;
 import LoginUI.Login;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -21,12 +27,13 @@ import javax.swing.table.DefaultTableModel;
  * @author gregoriuskevin
  */
 public class User_Course extends javax.swing.JFrame {
-
-    public User_Course() throws IOException {
+    
+    public User_Course(Course c) throws IOException {
         initComponents();
-        loadtable();
+        explanation.setLineWrap(true);
+        explanation.setWrapStyleWord(true);
+        loadtable(c);
         setResizable(false);
-        jTextArea1.setText("Test");
 
     }
 
@@ -34,9 +41,18 @@ public class User_Course extends javax.swing.JFrame {
     
 
     
-    private void loadtable() throws IOException{
-
+    private void loadtable(Course c) throws IOException{
+     
+        introduction.setText(c.getCourseName());
+        courseID.setText(c.getID());
+        passingGrade.setText(c.getPassingGrade());
+        explanation.setText(c.getExplanation());
+        question.setText(c.getQuestion());
         
+        List<String> items = Arrays.asList(c.getAnswer1(), c.getAnswer2(), c.getAnswer3(), c.getAnswer4());
+        for (String item : items) {
+            answer.addItem(item);
+        }
     }
     
     
@@ -73,19 +89,28 @@ public class User_Course extends javax.swing.JFrame {
         buttonGroup2 = new javax.swing.ButtonGroup();
         buttonGroup3 = new javax.swing.ButtonGroup();
         buttonGroup4 = new javax.swing.ButtonGroup();
+        buttonGroup5 = new javax.swing.ButtonGroup();
+        buttonGroup6 = new javax.swing.ButtonGroup();
+        buttonGroup7 = new javax.swing.ButtonGroup();
+        buttonGroup8 = new javax.swing.ButtonGroup();
+        buttonGroup9 = new javax.swing.ButtonGroup();
         jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         guide1 = new javax.swing.JLabel();
-        date1 = new javax.swing.JLabel();
+        introduction = new javax.swing.JLabel();
         guide2 = new javax.swing.JLabel();
-        time1 = new javax.swing.JLabel();
+        courseID = new javax.swing.JLabel();
         guide3 = new javax.swing.JLabel();
-        venue1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        explanation = new javax.swing.JTextArea();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        passingGrade = new javax.swing.JLabel();
+        guide4 = new javax.swing.JLabel();
+        question = new javax.swing.JLabel();
+        guide5 = new javax.swing.JLabel();
+        answer = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -130,31 +155,28 @@ public class User_Course extends javax.swing.JFrame {
         guide1.setForeground(new java.awt.Color(0, 102, 51));
         guide1.setText("Course ID");
 
-        date1.setFont(new java.awt.Font("Poppins", 1, 24)); // NOI18N
-        date1.setForeground(new java.awt.Color(0, 102, 51));
-        date1.setText("Introduction to Blockchain");
+        introduction.setFont(new java.awt.Font("Poppins", 1, 24)); // NOI18N
+        introduction.setForeground(new java.awt.Color(0, 102, 51));
+        introduction.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        introduction.setText("Introduction to Blockchain");
 
         guide2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         guide2.setForeground(new java.awt.Color(0, 102, 51));
         guide2.setText("Passing Grade");
 
-        time1.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
-        time1.setForeground(new java.awt.Color(0, 102, 51));
-        time1.setText("#0001");
+        courseID.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
+        courseID.setForeground(new java.awt.Color(0, 102, 51));
+        courseID.setText("0");
 
         guide3.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         guide3.setForeground(new java.awt.Color(0, 102, 51));
-        guide3.setText("Description");
+        guide3.setText("Explanation");
 
-        venue1.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
-        venue1.setForeground(new java.awt.Color(0, 102, 51));
-        venue1.setText("60");
-
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        explanation.setEditable(false);
+        explanation.setColumns(20);
+        explanation.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
+        explanation.setRows(5);
+        jScrollPane1.setViewportView(explanation);
 
         jButton2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 102, 1));
@@ -174,6 +196,22 @@ public class User_Course extends javax.swing.JFrame {
             }
         });
 
+        passingGrade.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
+        passingGrade.setForeground(new java.awt.Color(0, 102, 51));
+        passingGrade.setText("0");
+
+        guide4.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        guide4.setForeground(new java.awt.Color(0, 102, 51));
+        guide4.setText("Question");
+
+        question.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
+        question.setForeground(new java.awt.Color(0, 102, 51));
+        question.setText("???");
+
+        guide5.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        guide5.setForeground(new java.awt.Color(0, 102, 51));
+        guide5.setText("Answer");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -181,51 +219,66 @@ public class User_Course extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel2))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(63, 63, 63)
-                        .addComponent(date1))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(95, 95, 95)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(guide2)
-                                    .addComponent(guide1)
-                                    .addComponent(guide3))
-                                .addGap(43, 43, 43))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jButton2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton3)
-                            .addComponent(time1)
-                            .addComponent(venue1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                                .addComponent(jLabel2))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(95, 95, 95)
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(guide2)
+                                            .addComponent(guide1)
+                                            .addComponent(guide3)
+                                            .addComponent(guide4)
+                                            .addComponent(guide5))
+                                        .addGap(43, 43, 43))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(jButton2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton3)
+                                    .addComponent(courseID)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(passingGrade)
+                                    .addComponent(question)
+                                    .addComponent(answer, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(introduction)
+                        .addGap(73, 73, 73)))
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addComponent(date1)
-                .addGap(18, 18, 18)
+                .addGap(38, 38, 38)
+                .addComponent(introduction)
+                .addGap(29, 29, 29)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(guide1)
-                    .addComponent(time1))
+                    .addComponent(courseID))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(guide2)
-                    .addComponent(venue1))
+                    .addComponent(passingGrade))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(guide3)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addGap(17, 17, 17)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(guide4)
+                    .addComponent(question))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(guide5)
+                    .addComponent(answer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton3))
@@ -291,9 +344,7 @@ public class User_Course extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -444,14 +495,24 @@ public class User_Course extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> answer;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.ButtonGroup buttonGroup4;
-    private javax.swing.JLabel date1;
+    private javax.swing.ButtonGroup buttonGroup5;
+    private javax.swing.ButtonGroup buttonGroup6;
+    private javax.swing.ButtonGroup buttonGroup7;
+    private javax.swing.ButtonGroup buttonGroup8;
+    private javax.swing.ButtonGroup buttonGroup9;
+    private javax.swing.JLabel courseID;
+    private javax.swing.JTextArea explanation;
     private javax.swing.JLabel guide1;
     private javax.swing.JLabel guide2;
     private javax.swing.JLabel guide3;
+    private javax.swing.JLabel guide4;
+    private javax.swing.JLabel guide5;
+    private javax.swing.JLabel introduction;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -471,8 +532,7 @@ public class User_Course extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JLabel time1;
-    private javax.swing.JLabel venue1;
+    private javax.swing.JLabel passingGrade;
+    private javax.swing.JLabel question;
     // End of variables declaration//GEN-END:variables
 }
