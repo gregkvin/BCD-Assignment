@@ -2,16 +2,16 @@ package LoginUI;
 
 import AdminUI.AdminRecord;
 import AdminUI.Admin_Menu;
-<<<<<<< HEAD:src/main/java/LoginUI/Login.java
+
 import Blockchain.BlockLogic;
 import static Blockchain.BlockLogic.userBlock;
 import Blockchain.Blockchain;
 import Class.User;
-=======
+
 import Cryptography.Asymmetric;
 import Hashing.Hasher;
 import Hashing.Salt;
->>>>>>> front-end:src/main/java/LoginUI/AdminLogin.java
+
 import UserUI.User_Menu;
 import com.mycompany.bcd.assignment.FileHandle;
 import java.awt.Color;
@@ -307,28 +307,15 @@ public class AdminLogin extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Invalid password", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (IOException ex) {
-<<<<<<< HEAD:src/main/java/LoginUI/Login.java
-            Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }*/
-        BlockLogic bl = new BlockLogic();
 
-        Blockchain userBlockchain = Blockchain.getInstance(userBlock);
-        
-        User foundUser = bl.findUser(username.getText(), String.valueOf(password.getPassword()), userBlockchain);
-        
-        if (foundUser != null) {
-            System.out.println("User found: " + foundUser);
-            new User_Menu().setVisible(true);
-        }
-
-=======
-            Logger.getLogger(AdminLogin.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdminLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(AdminLogin.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchPaddingException ex) {
             Logger.getLogger(AdminLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
->>>>>>> front-end:src/main/java/LoginUI/AdminLogin.java
+       
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -363,9 +350,8 @@ public class AdminLogin extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Username not found.");
             }
         } catch (IOException ex) {
-<<<<<<< HEAD:src/main/java/LoginUI/Login.java
-            Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }*/
+            Logger.getLogger(AdminLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
          /*jLabel3.setVisible(true);
                 jButton3.setVisible(false);
                 jButton1.setVisible(true);
@@ -373,7 +359,6 @@ public class AdminLogin extends javax.swing.JFrame {
                 password.setVisible(true);*/
 //         dispose();
          password.setVisible(true);
-=======
             Logger.getLogger(AdminLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(AdminLogin.class.getName()).log(Level.SEVERE, null, ex);
@@ -385,7 +370,6 @@ public class AdminLogin extends javax.swing.JFrame {
         jButton1.setVisible(true);
         username.setEditable(false);
         password.setVisible(true);*/
->>>>>>> front-end:src/main/java/LoginUI/AdminLogin.java
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void passwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordActionPerformed
