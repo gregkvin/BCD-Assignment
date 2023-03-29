@@ -79,5 +79,24 @@ public class BlockLogic {
         bc.nextBlock(b1);
         bc.distribute();
     }
+    
+    public boolean isUserDuplicate(User newUser, Blockchain bc) {
+        LinkedList<Block> chain = bc.get();
+
+        for (Block block : chain) {
+            Transaction transactionList = block.tranxLst;
+            if (transactionList != null) {
+                for (String data : transactionList.getDataLst()) {
+                    String[] parts = data.split("\\|");
+                    if (parts.length >= 5) {
+                        if (parts[1].equals(newUser.getUsername()) || parts[2].equals(newUser.getFullName())) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
 }

@@ -320,7 +320,7 @@ public class Login extends javax.swing.JFrame {
         
         if (foundUser != null) {
             System.out.println("User found: " + foundUser);
-            new MainMenu().setVisible(true);
+            new User_Menu().setVisible(true);
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed

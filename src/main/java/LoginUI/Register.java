@@ -6,6 +6,8 @@
 package LoginUI;
 
 import Blockchain.BlockLogic;
+import static Blockchain.BlockLogic.userBlock;
+import Blockchain.Blockchain;
 import Class.User;
 import java.io.IOException;
 import java.util.UUID;
@@ -315,11 +317,13 @@ public class Register extends javax.swing.JFrame {
         String Gender = (String) gender.getSelectedItem();
         String DoB = dob.getText();
         String Email = email.getText();
-        
-        User user = new User(randomId,  userName, fullName, pwd, Gender, DoB, Email);
-        
         BlockLogic cb = new BlockLogic();
-        cb.userBlock(user);
+        User user = new User(randomId,  userName, fullName, pwd, Gender, DoB, Email);
+        if (cb.isUserDuplicate(user, Blockchain.getInstance(userBlock))) {
+            JOptionPane.showMessageDialog(null, "This user already registered!");
+        } else{
+            cb.userBlock(user);
+        }
         
     }//GEN-LAST:event_jButton3ActionPerformed
 
