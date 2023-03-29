@@ -370,18 +370,18 @@ public class Admin_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        try {
-            // TODO add your handling code here:
-            dispose();
-            String user1 = jMenu1.getText();
-            new Course_Register(user1).setVisible(true);
-        } catch (IOException ex) {
-            Logger.getLogger(Admin_Menu.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(Admin_Menu.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchPaddingException ex) {
-            Logger.getLogger(Admin_Menu.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            // TODO add your handling code here:
+//            dispose();
+//            String user1 = jMenu1.getText();
+//            new Course_Register(user1).setVisible(true);
+//        } catch (IOException ex) {
+//            Logger.getLogger(Admin_Menu.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (NoSuchAlgorithmException ex) {
+//            Logger.getLogger(Admin_Menu.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (NoSuchPaddingException ex) {
+//            Logger.getLogger(Admin_Menu.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     /**

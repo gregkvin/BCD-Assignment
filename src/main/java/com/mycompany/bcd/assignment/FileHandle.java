@@ -75,11 +75,30 @@ public class FileHandle {
         return demo;
     }
     
-    public String autoIncrement(String path, String [] id) throws IOException{
+    public String autoIncrement(String path, String[] id) throws IOException {
         int line = readLineNumber(path);
-        int idi = Integer.parseInt(id[line-1]);
+    
+        // Add a check for empty files
+        if (line == 0) {
+            return "1"; // Return 1 as the first ID when the file is empty
+        }
+    
+        int idi = Integer.parseInt(id[line - 1]);
         int auto = idi + 1;
         return String.valueOf(auto);
     }
+    
+    public String getKeyById(String path, String id) throws IOException {
+        BufferedReader br = setReadLines(path);
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] splitLine = line.split("-");
+            if (splitLine[0].equals(id)) {
+                return splitLine[1];
+            }
+        }
+        return null;
+    }
+
 
 }

@@ -5,14 +5,19 @@
  */
 package AdminUI;
 
+import Cryptography.Symmetric;
 import LoginUI.Login;
 import com.mycompany.bcd.assignment.FileHandle;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -31,23 +36,49 @@ public class Admin_Course extends javax.swing.JFrame {
         setResizable(false);
         loadTable();
     }
+    
+    private String decryptString(String encryptedString, String base64Key) throws Exception {
+        byte[] decodedKeyBytes = Base64.getDecoder().decode(base64Key);
+        SecretKeySpec originalKey = new SecretKeySpec(decodedKeyBytes, "AES");
+        Symmetric s = new Symmetric();
+        return s.decrypt(encryptedString, originalKey);
+    }
 
     private void loadTable() throws IOException{
-        int line = fh.readLineNumber(path), n=0;
+        int line = fh.readLineNumber(path), n = 0;
         DefaultTableModel mod = (DefaultTableModel)(jTable1.getModel());
         mod.setRowCount(0);
         try {
             String[] id = cr.readID(path);
             String[] name = cr.readName(path); 
-            String [] desc = cr.readDesc(path);
             String[] grade =  cr.readPassingGrade(path);
+            String [] explanation = cr.readEx(path);
+            String[] question =  cr.readQuestion(path);
+            String[] answer1 =  cr.readAnswer1(path);
+            String[] answer2 =  cr.readAnswer2(path);
+            String[] answer3 =  cr.readAnswer3(path);
+            String[] answer4 =  cr.readAnswer4(path);
+            
             while(n < line){
-                mod.addRow(new Object[]{id[n], name[n], grade[n], desc[n]});
-                n=n+1;
+                String keyPath = "courseKey.txt";
+                String base64Key = fh.getKeyById(keyPath, id[n]);
+            
+                String decryptedName = decryptString(name[n], base64Key);
+                String decryptedGrade = decryptString(grade[n], base64Key);
+                String decryptedExplanation = decryptString(explanation[n], base64Key);
+                String decryptedQuestion = decryptString(question[n], base64Key);
+                String decryptedAnswer1 = decryptString(answer1[n], base64Key);
+                String decryptedAnswer2 = decryptString(answer2[n], base64Key);
+                String decryptedAnswer3 = decryptString(answer3[n], base64Key);
+                String decryptedAnswer4 = decryptString(answer4[n], base64Key);
+                                                                
+                mod.addRow(new Object[]{id[n], decryptedName, decryptedGrade, decryptedExplanation, 
+                    decryptedQuestion, decryptedAnswer1, decryptedAnswer2, decryptedAnswer3, decryptedAnswer4});
+                n = n + 1;
             }
-            
+        
             jTable1.setModel(mod);
-            
+        
         } catch (Exception e){
             
         }
@@ -84,6 +115,7 @@ public class Admin_Course extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jButton8 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -124,7 +156,6 @@ public class Admin_Course extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 102, 51));
         jLabel2.setText("• BLOCKCHAIN E-CERTIFICATE SYSTEM");
 
-        jButton7.setBackground(new java.awt.Color(255, 255, 255));
         jButton7.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jButton7.setForeground(new java.awt.Color(0, 102, 51));
         jButton7.setText("Back");
@@ -136,17 +167,17 @@ public class Admin_Course extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Course ID", "Course Name", "Passing Grade", "Description"
+                "Course ID", "Course Name", "Passing Grade", "Explanation", "Question", "Answer 1", "Answer 2", "Answer 3", "Answer 4"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, false, true
+                false, true, false, true, true, true, true, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -154,6 +185,15 @@ public class Admin_Course extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(jTable1);
+
+        jButton8.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        jButton8.setForeground(new java.awt.Color(0, 102, 51));
+        jButton8.setText("Add Course");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -165,8 +205,10 @@ public class Admin_Course extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 897, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1190, Short.MAX_VALUE))
                 .addGap(15, 15, 15)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -180,7 +222,9 @@ public class Admin_Course extends javax.swing.JFrame {
                 .addGap(7, 7, 7)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton7, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton7)
+                        .addComponent(jButton8)))
                 .addContainerGap())
         );
 
@@ -226,8 +270,13 @@ public class Admin_Course extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu5.setForeground(new java.awt.Color(0, 102, 51));
-        jMenu5.setText("Manage Courses");
+        jMenu5.setText("Manage Course");
         jMenu5.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
+        jMenu5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu5ActionPerformed(evt);
+            }
+        });
         jMenuBar1.add(jMenu5);
 
         setJMenuBar(jMenuBar1);
@@ -284,6 +333,37 @@ public class Admin_Course extends javax.swing.JFrame {
         String user1 = jMenu1.getText();
         new Admin_Menu(user1).setVisible(true);
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jMenu5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu5ActionPerformed
+        try {
+            // TODO add your handling code here:
+            dispose();
+//            String user1 = jMenu1.getText();
+            new Course_Register().setVisible(true);
+        } catch (IOException ex) {
+            Logger.getLogger(Admin_Menu.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Admin_Menu.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex) {
+            Logger.getLogger(Admin_Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenu5ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+                try {
+            // TODO add your handling code here:
+            dispose();
+//            String user1 = jMenu1.getText();
+            new Course_Register().setVisible(true);
+        } catch (IOException ex) {
+            Logger.getLogger(Admin_Menu.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Admin_Menu.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex) {
+            Logger.getLogger(Admin_Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton8ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -359,6 +439,7 @@ public class Admin_Course extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

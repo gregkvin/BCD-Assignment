@@ -45,11 +45,11 @@ public class Symmetric {
     }
     
     public String decrypt(String cipherText, Key key) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException{
-        String ohgee = null;
+        String data = null;
         cipher.init(Cipher.DECRYPT_MODE, key);
         byte[] cipherBytes = Base64.getDecoder().decode(cipherText);
-        ohgee = new String(cipher.doFinal(cipherBytes));
-        return ohgee;
+        data = new String(cipher.doFinal(cipherBytes));
+        return data;
         
     }
 }

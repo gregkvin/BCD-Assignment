@@ -23,11 +23,11 @@ import javax.swing.JOptionPane;
 public class Course_Register extends javax.swing.JFrame {
 
     FileHandle fh = new FileHandle();
-    public Course_Register(String user1) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public Course_Register() throws IOException, NoSuchAlgorithmException, NoSuchPaddingException {
         initComponents();
         setResizable(false);
         setAuto();
-        jMenu1.setText(user1);
+//        jMenu1.setText(user1);
        
     }
     
@@ -74,7 +74,17 @@ public class Course_Register extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         id = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        desc = new javax.swing.JTextArea();
+        explanation = new javax.swing.JTextArea();
+        jLabel10 = new javax.swing.JLabel();
+        question = new javax.swing.JTextField();
+        answer1 = new javax.swing.JTextField();
+        answer2 = new javax.swing.JTextField();
+        answer3 = new javax.swing.JTextField();
+        answer4 = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -122,9 +132,8 @@ public class Course_Register extends javax.swing.JFrame {
 
         jLabel13.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(0, 102, 51));
-        jLabel13.setText("Description");
+        jLabel13.setText("Explanation");
 
-        jButton7.setBackground(new java.awt.Color(255, 255, 255));
         jButton7.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jButton7.setForeground(new java.awt.Color(0, 102, 51));
         jButton7.setText("Back");
@@ -134,7 +143,6 @@ public class Course_Register extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setBackground(new java.awt.Color(255, 255, 255));
         jButton3.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 102, 51));
         jButton3.setText("Submit");
@@ -160,9 +168,39 @@ public class Course_Register extends javax.swing.JFrame {
             }
         });
 
-        desc.setColumns(20);
-        desc.setRows(5);
-        jScrollPane1.setViewportView(desc);
+        explanation.setColumns(20);
+        explanation.setRows(5);
+        jScrollPane1.setViewportView(explanation);
+
+        jLabel10.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(0, 102, 51));
+        jLabel10.setText("Question");
+
+        question.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+
+        answer1.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+
+        answer2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+
+        answer3.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+
+        answer4.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+
+        jLabel11.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(0, 102, 51));
+        jLabel11.setText("Answer 1");
+
+        jLabel12.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(0, 102, 51));
+        jLabel12.setText("Answer 2");
+
+        jLabel14.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(0, 102, 51));
+        jLabel14.setText("Answer 3");
+
+        jLabel15.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(0, 102, 51));
+        jLabel15.setText("Answer 4");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -178,28 +216,39 @@ public class Course_Register extends javax.swing.JFrame {
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton3)
-                                .addGap(114, 114, 114))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                            .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel7)
                                     .addComponent(jLabel8)
                                     .addComponent(jLabel13)
-                                    .addComponent(jLabel9))
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel10)
+                                    .addComponent(jLabel11)
+                                    .addComponent(jLabel12)
+                                    .addComponent(jLabel14)
+                                    .addComponent(jLabel15))
                                 .addGap(18, 18, 18)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(id, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(name, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
                                         .addComponent(passingGr))
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+                                    .addComponent(question)
+                                    .addComponent(answer1)
+                                    .addComponent(answer2)
+                                    .addComponent(answer3)
+                                    .addComponent(answer4))
                                 .addContainerGap())))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(158, 158, 158)
+                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addComponent(jButton3)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -226,11 +275,31 @@ public class Course_Register extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(45, 45, 45)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                    .addComponent(question, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(answer1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(answer2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(answer3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(answer4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel15))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton7)
+                    .addComponent(jButton3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(jLabel2))
         );
 
@@ -281,15 +350,11 @@ public class Course_Register extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -330,13 +395,14 @@ public class Course_Register extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        String [] input = {id.getText(),name.getText(),passingGr.getText(), desc.getText()};
-        if(input[0].equals("")||input[1].equals("")||input[2].equals("")||input[3].equals("")){
+        if(id.getText().equals("")||name.getText().equals("")||passingGr.getText().equals("")||
+                explanation.getText().equals("")||question.getText().equals("")||answer1.getText().equals("")
+                ||answer2.getText().equals("")||answer3.getText().equals("")||answer4.getText().equals("")){
             JOptionPane.showMessageDialog(null, "Incomplete credentials, you have not fill one or more information.", "Error!", JOptionPane.ERROR_MESSAGE);
         } else {
             try {
                 CourseRecord cr = new CourseRecord();
-                cr.registerCourse(id.getText(),name.getText(),passingGr.getText(), desc.getText());
+                cr.registerCourse(id.getText(),name.getText(),passingGr.getText(), explanation.getText(), question.getText(), answer1.getText(), answer2.getText(), answer3.getText(), answer4.getText());
                 JOptionPane.showMessageDialog(null, "Saved successfully!");
                 dispose();
                 String user1 = jMenu1.getText();
@@ -389,8 +455,8 @@ public class Course_Register extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    String user1 = null;
-                    new Course_Register(user1).setVisible(true);
+//                    String user1 = null;
+                    new Course_Register().setVisible(true);
                 } catch (IOException ex) {
                     Logger.getLogger(Course_Register.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (NoSuchAlgorithmException ex) {
@@ -403,13 +469,22 @@ public class Course_Register extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextArea desc;
+    private javax.swing.JTextField answer1;
+    private javax.swing.JTextField answer2;
+    private javax.swing.JTextField answer3;
+    private javax.swing.JTextField answer4;
+    private javax.swing.JTextArea explanation;
     private javax.swing.JTextField id;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -427,5 +502,6 @@ public class Course_Register extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField name;
     private javax.swing.JTextField passingGr;
+    private javax.swing.JTextField question;
     // End of variables declaration//GEN-END:variables
 }
