@@ -6,7 +6,12 @@
 package com.mycompany.bcd.assignment;
 
 import Blockchain.Blockchain;
+import static Blockchain.BlockLogic.certBlock;
+import static Blockchain.BlockLogic.masterFolder;
+import static Blockchain.BlockLogic.userBlock;
 import LoginUI.MainMenu;
+import com.google.gson.GsonBuilder;
+import java.io.File;
 
 /**
  *
@@ -18,8 +23,18 @@ public class BlockchainAssignment {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-//        Blockchain bc;
+        
+        Blockchain bc = Blockchain.getInstance( userBlock );
+        Blockchain bc2 = Blockchain.getInstance( certBlock );
+        String chain = new GsonBuilder().setPrettyPrinting().create().toJson(userBlock);
+        System.out.println(chain);
+        if ( !new File(masterFolder).exists() ) {
+            System.err.println( "> creating Blockchain binary !" );
+            new File(masterFolder).mkdir();
+            bc.genesis();
+            bc2.genesis();
+        }
+        
         MainMenu form = new MainMenu();
         form.setVisible(true);
     }

@@ -7,6 +7,7 @@ package Class;
 import java.io.Serializable;
 
 public class User implements Serializable {
+    private String ID;
     private String username;
     private String fullName;
     private String password;
@@ -18,7 +19,8 @@ public class User implements Serializable {
 //    private boolean validatorStatus;
 
     // Constructor
-    public User(String username, String fullName, String password, String gender, String dateOfBirth, String email) {
+    public User(String ID, String username, String fullName, String password, String gender, String dateOfBirth, String email) {
+        this.ID = ID;
         this.username = username;
         this.fullName = fullName;
         this.password = password;
@@ -32,6 +34,10 @@ public class User implements Serializable {
 
     // Add getters and setters for each field here
     // ...
+    
+    public String getID(){
+        return ID;
+    }
     
     public String getUsername(){
         return username;
@@ -59,7 +65,7 @@ public class User implements Serializable {
     
     @Override
     public String toString() {
-        return username + "|" + fullName + "|" + password + "|" + gender + "|" + dateOfBirth + "|" + email;
+        return ID + "|" + username + "|" + fullName + "|" + password + "|" + gender + "|" + dateOfBirth + "|" + email;
     }
 }
 

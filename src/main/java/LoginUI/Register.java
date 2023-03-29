@@ -5,8 +5,10 @@
  */
 package LoginUI;
 
-import Blockchain.CreateBlock;
+import Blockchain.BlockLogic;
+import Class.User;
 import java.io.IOException;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -63,15 +65,15 @@ public class Register extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         name = new javax.swing.JTextField();
-        usernameee = new javax.swing.JTextField();
+        username = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        email = new javax.swing.JTextField();
+        dob = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        nationality = new javax.swing.JTextField();
+        email = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         password = new javax.swing.JPasswordField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        gender = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
 
@@ -96,7 +98,6 @@ public class Register extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        jButton3.setBackground(new java.awt.Color(255, 255, 255));
         jButton3.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 102, 51));
         jButton3.setText("Submit");
@@ -120,7 +121,6 @@ public class Register extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jButton7.setBackground(new java.awt.Color(255, 255, 255));
         jButton7.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jButton7.setForeground(new java.awt.Color(0, 102, 51));
         jButton7.setText("Back");
@@ -148,7 +148,7 @@ public class Register extends javax.swing.JFrame {
 
         name.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
 
-        usernameee.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        username.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
 
         jLabel10.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 102, 51));
@@ -158,21 +158,26 @@ public class Register extends javax.swing.JFrame {
         jLabel11.setForeground(new java.awt.Color(0, 102, 51));
         jLabel11.setText("Date of Birth");
 
-        email.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        dob.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
 
         jLabel12.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(0, 102, 51));
         jLabel12.setText("Email");
 
-        nationality.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        email.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
 
         jLabel13.setFont(new java.awt.Font("Poppins", 1, 12)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(0, 102, 51));
         jLabel13.setText("Password");
 
-        jComboBox1.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
-        jComboBox1.setForeground(new java.awt.Color(0, 102, 0));
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Male", "Female" }));
+        gender.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
+        gender.setForeground(new java.awt.Color(0, 102, 0));
+        gender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Male", "Female" }));
+        gender.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                genderActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -197,9 +202,9 @@ public class Register extends javax.swing.JFrame {
                                             .addComponent(jLabel12))
                                         .addGap(18, 18, 18)
                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(dob, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
                                             .addComponent(email, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                                            .addComponent(nationality, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(gender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(jLabel7)
@@ -209,7 +214,7 @@ public class Register extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(name, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                                            .addComponent(usernameee, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                                            .addComponent(username, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
                                             .addComponent(jButton3)
                                             .addComponent(password))))
                                 .addGap(84, 84, 84))))
@@ -230,7 +235,7 @@ public class Register extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(usernameee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -238,15 +243,15 @@ public class Register extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(gender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(9, 9, 9)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
-                    .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dob, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
-                    .addComponent(nationality, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
@@ -277,6 +282,9 @@ public class Register extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
+        
+        
+        
         dispose();
         new MainMenu().setVisible(true);
     }//GEN-LAST:event_jButton7ActionPerformed
@@ -298,10 +306,26 @@ public class Register extends javax.swing.JFrame {
         }
         }*/
         
-        CreateBlock cb = new CreateBlock();
-        cb.userBlock();
+        UUID uuid = UUID.randomUUID();
+        String randomId = uuid.toString();
+        System.out.println(randomId);
+        String fullName = name.getText();
+        String userName = username.getText();
+        String pwd = String.valueOf(password.getPassword());
+        String Gender = (String) gender.getSelectedItem();
+        String DoB = dob.getText();
+        String Email = email.getText();
+        
+        User user = new User(randomId,  userName, fullName, pwd, Gender, DoB, Email);
+        
+        BlockLogic cb = new BlockLogic();
+        cb.userBlock(user);
         
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void genderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genderActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_genderActionPerformed
 
     /**
      * @param args the command line arguments
@@ -358,11 +382,12 @@ public class Register extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField dob;
     private javax.swing.JTextField email;
+    private javax.swing.JComboBox<String> gender;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton7;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -383,8 +408,7 @@ public class Register extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JTextField name;
-    private javax.swing.JTextField nationality;
     private javax.swing.JPasswordField password;
-    private javax.swing.JTextField usernameee;
+    private javax.swing.JTextField username;
     // End of variables declaration//GEN-END:variables
 }

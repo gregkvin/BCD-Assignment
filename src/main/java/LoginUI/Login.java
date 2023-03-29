@@ -1,6 +1,10 @@
 package LoginUI;
 
 import AdminUI.Admin_Menu;
+import Blockchain.BlockLogic;
+import static Blockchain.BlockLogic.userBlock;
+import Blockchain.Blockchain;
+import Class.User;
 import UserUI.User_Menu;
 import java.awt.Color;
 import java.awt.Font;
@@ -93,9 +97,9 @@ public class Login extends javax.swing.JFrame {
         ui.put("Panel.background", Color.white);
         setResizable(false);
         jLabel3.setVisible(false);
-        jButton3.setEnabled(true);
-        jButton1.setVisible(false);
-        password.setVisible(false);
+        jButton3.setEnabled(false);
+        jButton1.setVisible(true);
+        password.setVisible(true);
     }
 
     /**
@@ -308,7 +312,17 @@ public class Login extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }*/
-        new Admin_Menu().setVisible(true);
+        BlockLogic bl = new BlockLogic();
+
+        Blockchain userBlockchain = Blockchain.getInstance(userBlock);
+        
+        User foundUser = bl.findUser(username.getText(), String.valueOf(password.getPassword()), userBlockchain);
+        
+        if (foundUser != null) {
+            System.out.println("User found: " + foundUser);
+            new MainMenu().setVisible(true);
+        }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -347,8 +361,8 @@ public class Login extends javax.swing.JFrame {
                 jButton1.setVisible(true);
                 username.setEditable(false);
                 password.setVisible(true);*/
-         dispose();
-         new User_Menu().setVisible(true);
+//         dispose();
+         password.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
