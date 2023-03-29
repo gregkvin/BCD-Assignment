@@ -5,7 +5,7 @@
  */
 package UserUI;
 
-import LoginUI.Login;
+import LoginUI.AdminLogin;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -224,7 +224,7 @@ public class User_Menu extends javax.swing.JFrame {
             try {
                 dispose();
                 logout();
-                new Login().setVisible(true);
+                new AdminLogin().setVisible(true);
                 if(yesno == JOptionPane.NO_OPTION) {
                     remove(yesno);
                 }

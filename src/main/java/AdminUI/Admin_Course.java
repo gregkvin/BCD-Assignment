@@ -5,7 +5,8 @@
  */
 package AdminUI;
 
-import LoginUI.Login;
+import LoginUI.AdminLogin;
+import com.mycompany.bcd.assignment.FileHandle;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,27 +22,37 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Admin_Course extends javax.swing.JFrame {
 
+    FileHandle fh = new FileHandle();
+    CourseRecord cr = new CourseRecord();
+    String path = "course.txt";
+    
     public Admin_Course() throws IOException {
         initComponents();
-        loadtable();
         setResizable(false);
-
+        loadTable();
     }
 
-  
-    
-
-    
-    private void loadtable() throws IOException{
-
-        
+    private void loadTable() throws IOException{
+        int line = fh.readLineNumber(path), n=0;
+        DefaultTableModel mod = (DefaultTableModel)(jTable1.getModel());
+        mod.setRowCount(0);
+        try {
+            String[] id = cr.readID(path);
+            String[] name = cr.readName(path); 
+            String [] desc = cr.readDesc(path);
+            String[] grade =  cr.readPassingGrade(path);
+            while(n < line){
+                mod.addRow(new Object[]{id[n], name[n], grade[n], desc[n]});
+                n=n+1;
+            }
+            
+            jTable1.setModel(mod);
+            
+        } catch (Exception e){
+            
+        }
     }
     
-    
-    
-    
-    
-        
     
     private void logout() throws IOException{
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
@@ -69,9 +80,10 @@ public class Admin_Course extends javax.swing.JFrame {
         jMenu4 = new javax.swing.JMenu();
         jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        centreeee = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
+        jButton7 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -108,8 +120,21 @@ public class Admin_Course extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        centreeee.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        centreeee.setModel(new javax.swing.table.DefaultTableModel(
+        jLabel2.setFont(new java.awt.Font("Poppins", 2, 10)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 102, 51));
+        jLabel2.setText("• BLOCKCHAIN E-CERTIFICATE SYSTEM");
+
+        jButton7.setBackground(new java.awt.Color(255, 255, 255));
+        jButton7.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        jButton7.setForeground(new java.awt.Color(0, 102, 51));
+        jButton7.setText("Back");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -117,27 +142,18 @@ public class Admin_Course extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Course ID", "Course Name", "Description", "Passing Grade"
+                "Course ID", "Course Name", "Passing Grade", "Description"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, true, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        centreeee.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                centreeeeMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(centreeee);
-
-        jLabel2.setFont(new java.awt.Font("Poppins", 2, 10)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 102, 51));
-        jLabel2.setText("• BLOCKCHAIN E-CERTIFICATE SYSTEM");
+        jScrollPane2.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -146,23 +162,26 @@ public class Admin_Course extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addGap(0, 724, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 897, Short.MAX_VALUE))
+                .addGap(15, 15, 15)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 303, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18))
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton7, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
         );
 
         jLabel3.setText("jLabel3");
@@ -235,7 +254,7 @@ public class Admin_Course extends javax.swing.JFrame {
             try {
                 dispose();
                 logout();
-                new Login().setVisible(true);
+                new AdminLogin().setVisible(true);
                 if(yesno == JOptionPane.NO_OPTION) {
                     remove(yesno);
                 }
@@ -259,9 +278,12 @@ public class Admin_Course extends javax.swing.JFrame {
 //        }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    private void centreeeeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_centreeeeMouseClicked
-        
-    }//GEN-LAST:event_centreeeeMouseClicked
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        dispose();
+        String user1 = jMenu1.getText();
+        new Admin_Menu(user1).setVisible(true);
+    }//GEN-LAST:event_jButton7ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -335,8 +357,8 @@ public class Admin_Course extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable centreeee;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -352,6 +374,7 @@ public class Admin_Course extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

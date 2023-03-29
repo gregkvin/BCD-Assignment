@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 LoginUI/Login$2.class
 Hashing/Salt.class
 AdminUI/Admin_Certificates$1.class
@@ -71,3 +72,5 @@ Blockchain/MerkleTree.class
 UserUI/User_Menu$5.class
 UserUI/User_Certificate$6.class
 AdminUI/Admin_Users.class
+=======
+>>>>>>> front-end
