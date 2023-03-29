@@ -19,7 +19,7 @@ public class BlockchainAssignment {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Blockchain bc;
+//        Blockchain bc;
         MainMenu form = new MainMenu();
         form.setVisible(true);
     }

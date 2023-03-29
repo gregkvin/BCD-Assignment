@@ -17,7 +17,7 @@ import java.util.LinkedList;
 import com.google.gson.GsonBuilder;
 
 public class Blockchain {
-    private static LinkedList<Blockchain.Block> db = new LinkedList<>();
+    private static LinkedList<Block> db = new LinkedList<>();
     private static Blockchain _instance;
     public static Blockchain getInstance( String chainFile ) {
         if(_instance == null)
@@ -33,13 +33,12 @@ public class Blockchain {
     }
     
     public void genesis() {
-        Blockchain.Block genesis = new Blockchain.Block(0, "0");
+        Block genesis = new Block(0, "0");
         db.add(genesis);
         persist();
     }
-
-    
-    public void nextBlock(Blockchain.Block newBlock) {
+  
+    public void nextBlock(Block newBlock) {
         db = get();
         int newIndex = db.size(); // Get the size of the current blockchain
         newBlock.getBlockHeader().setIndex(newIndex); // Set the new index value for the block
@@ -47,13 +46,12 @@ public class Blockchain {
         persist();
     }
 
-    
-    public LinkedList<Blockchain.Block> get()
+    public LinkedList<Block> get()
     {
         try( FileInputStream fin = new FileInputStream( this.chainFile ); 
              ObjectInputStream in = new ObjectInputStream( fin );
             ) {
-            return (LinkedList<lab4.Block>)in.readObject();
+            return (LinkedList<Block>)in.readObject();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -77,4 +75,5 @@ public class Blockchain {
         String chain = new GsonBuilder().setPrettyPrinting().create().toJson(db);
         System.out.println(chain);
     }
+
 }

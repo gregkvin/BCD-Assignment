@@ -71,7 +71,7 @@ public class Block implements Serializable{
     }
     
     /* aggregation relationship */
-    public Blockchain.Transaction tranxLst;
+    public Transaction tranxLst;
     public void setTranxLst(Transaction tranxLst) {
         this.tranxLst = tranxLst;
         if (tranxLst != null) {

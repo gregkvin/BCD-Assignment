@@ -5,6 +5,7 @@
  */
 package LoginUI;
 
+import Blockchain.CreateBlock;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -296,6 +297,10 @@ public class Register extends javax.swing.JFrame {
             Logger.getLogger(Add_User.class.getName()).log(Level.SEVERE, null, ex);
         }
         }*/
+        
+        CreateBlock cb = new CreateBlock();
+        cb.userBlock();
+        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
