@@ -5,7 +5,7 @@
  */
 package AdminUI;
 
-import LoginUI.AdminLogin;
+import LoginUI.Login;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
@@ -294,7 +294,7 @@ public class Admin_Menu extends javax.swing.JFrame {
             try {
                 dispose();
                 logout();
-                new AdminLogin().setVisible(true);
+                new Login().setVisible(true);
                 if(yesno == JOptionPane.NO_OPTION) {
                     remove(yesno);
                 }

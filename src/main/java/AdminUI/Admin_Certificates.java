@@ -5,7 +5,7 @@
  */
 package AdminUI;
 
-import LoginUI.AdminLogin;
+import LoginUI.Login;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -249,7 +249,7 @@ public class Admin_Certificates extends javax.swing.JFrame {
             try {
                 dispose();
                 logout();
-                new AdminLogin().setVisible(true);
+                new Login().setVisible(true);
                 if(yesno == JOptionPane.NO_OPTION) {
                     remove(yesno);
                 }
