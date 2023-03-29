@@ -5,7 +5,7 @@
  */
 package AdminUI;
 
-import LoginUI.Login;
+import LoginUI.AdminLogin;
 import com.mycompany.bcd.assignment.FileHandle;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -303,7 +303,7 @@ public class Course_Register extends javax.swing.JFrame {
             try {
                 dispose();
                 logout();
-                new Login().setVisible(true);
+                new AdminLogin().setVisible(true);
                 if(yesno == JOptionPane.NO_OPTION) {
                     remove(yesno);
                 }
