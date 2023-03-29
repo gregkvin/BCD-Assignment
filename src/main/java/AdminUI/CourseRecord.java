@@ -74,7 +74,7 @@ public class CourseRecord {
         String[] courseName = new String[line];
         while(n < line){
             try {
-                courseName[n] = s.decrypt(fh.getSplit(path, n, demo)[1], k);
+                courseName[n] = fh.getSplit(path, n, demo)[1];
                 System.out.println(courseName[n]);
                 n=n+1;
             } catch (InvalidKeySpecException ex) {
@@ -100,7 +100,7 @@ public class CourseRecord {
         String[] passingGr = new String[line];
         while(n < line){
             try {
-                passingGr[n] = s.decrypt(fh.getSplit(path, n, demo)[2], k);
+                passingGr[n] = fh.getSplit(path, n, demo)[2];
                 n=n+1;
             } catch (NoSuchAlgorithmException ex) {
                 Logger.getLogger(AdminRecord.class.getName()).log(Level.SEVERE, null, ex);
