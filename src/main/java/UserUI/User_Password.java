@@ -6,6 +6,7 @@
 package UserUI;
 
 import AdminUI.*;
+import Blockchain.BlockLogic;
 import Class.Course;
 import Class.User;
 import LoginUI.Login;
@@ -45,9 +46,9 @@ public class User_Password extends javax.swing.JFrame {
     
     private void loadtable() throws IOException{
      
-        oldPass.setText("hahah");
-        newPass.setText("hahah");
-        confirmPass.setText("hahah");
+        oldPass.setText("");
+        newPass.setText("");
+        confirmPass.setText("");
     }
     
     
@@ -97,10 +98,10 @@ public class User_Password extends javax.swing.JFrame {
         guide2 = new javax.swing.JLabel();
         guide3 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
-        oldPass = new javax.swing.JTextField();
-        newPass = new javax.swing.JTextField();
-        confirmPass = new javax.swing.JTextField();
         jButton5 = new javax.swing.JButton();
+        oldPass = new javax.swing.JPasswordField();
+        newPass = new javax.swing.JPasswordField();
+        confirmPass = new javax.swing.JPasswordField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -167,12 +168,6 @@ public class User_Password extends javax.swing.JFrame {
             }
         });
 
-        confirmPass.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                confirmPassActionPerformed(evt);
-            }
-        });
-
         jButton5.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jButton5.setForeground(new java.awt.Color(0, 102, 1));
         jButton5.setText("Submit");
@@ -195,11 +190,12 @@ public class User_Password extends javax.swing.JFrame {
                             .addComponent(guide3)
                             .addComponent(guide2)
                             .addComponent(jButton2))
-                        .addGap(18, 24, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(newPass, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(confirmPass, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton5))
+                        .addGap(18, 18, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton5)
+                            .addComponent(oldPass)
+                            .addComponent(newPass)
+                            .addComponent(confirmPass, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE))
                         .addGap(50, 50, 50))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,11 +204,8 @@ public class User_Password extends javax.swing.JFrame {
                                 .addComponent(introduction))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jLabel2))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(205, 205, 205)
-                                .addComponent(oldPass, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(jLabel2)))
+                        .addGap(0, 107, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -222,19 +215,19 @@ public class User_Password extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addComponent(introduction)
-                .addGap(34, 34, 34)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(36, 36, 36)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(guide1)
                     .addComponent(oldPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(guide2)
                     .addComponent(newPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(guide3)
                     .addComponent(confirmPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton5))
@@ -340,15 +333,38 @@ public class User_Password extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-
+        try {
+            dispose();
+            new User_Detail(user).setVisible(true);
+        } catch (IOException ex) {
+            Logger.getLogger(User_Password.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void confirmPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmPassActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_confirmPassActionPerformed
-
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+        if(oldPass.getText().equals(user.getPassword())){
+            if(newPass.getText().equals(user.getPassword())){
+                JOptionPane.showMessageDialog(null, "Please input a different password!");
+            } else if(!newPass.getText().equals(confirmPass.getText())){
+                JOptionPane.showMessageDialog(null, "New password and confirm password field is doesn't match!");
+            } else{
+                // Update the user data and create a new block
+                String newData = user.getUsername() + "|" +
+                         user.getFullName() + "|" +
+                         confirmPass.getText() + "|" +
+                         user.getGender() + "|" +
+                         user.getDoB() + "|" +
+                         user.getEmail();
+                // TODO: Create a new block with the updated data and add it to the blockchain
+                BlockLogic bl = new BlockLogic();
+                user.setPassword(confirmPass.getText());
+                bl.updateData(user.getID(), newData);
+                
+                JOptionPane.showMessageDialog(null, "Updated successfully!");
+            }
+        } else{
+            JOptionPane.showMessageDialog(null, "Your old password is incorrect!");
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
@@ -638,7 +654,7 @@ public class User_Password extends javax.swing.JFrame {
             public void run() {
                 String user1 = null;
                 try {
-                    new User_Password().setVisible(true);
+                    new User_Password(user).setVisible(true);
                 } catch (IOException ex) {
                     Logger.getLogger(User_Password.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -656,7 +672,7 @@ public class User_Password extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup7;
     private javax.swing.ButtonGroup buttonGroup8;
     private javax.swing.ButtonGroup buttonGroup9;
-    private javax.swing.JTextField confirmPass;
+    private javax.swing.JPasswordField confirmPass;
     private javax.swing.JLabel guide1;
     private javax.swing.JLabel guide2;
     private javax.swing.JLabel guide3;
@@ -679,7 +695,7 @@ public class User_Password extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;
-    private javax.swing.JTextField newPass;
-    private javax.swing.JTextField oldPass;
+    private javax.swing.JPasswordField newPass;
+    private javax.swing.JPasswordField oldPass;
     // End of variables declaration//GEN-END:variables
 }
