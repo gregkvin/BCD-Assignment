@@ -423,7 +423,7 @@ public class User_Course extends javax.swing.JFrame {
         System.out.println(currentDate);
         
         BlockLogic cb = new BlockLogic();
-        Completion completion = new Completion(randomId, user.getFullName(), c.getCourseName(), currentDate, "Unapproved");
+        Completion completion = new Completion(randomId, user.getFullName(), c.getCourseName(), currentDate, c.getPassingGrade(), grade, "Unapproved");
         cb.courseBlock(completion);
     }//GEN-LAST:event_jButton3ActionPerformed
 

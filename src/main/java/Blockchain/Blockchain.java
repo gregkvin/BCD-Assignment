@@ -14,75 +14,89 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.LinkedList;
+import java.util.HashMap;
 import com.google.gson.GsonBuilder;
+import java.io.File;
 
 public class Blockchain {
-    private static LinkedList<Block> db = new LinkedList<>();
-//    private static Blockchain _instance;
-//    public static Blockchain getInstance( String chainFile ) {
-//        if(_instance == null)
-//            _instance = new Blockchain( chainFile );
-//        return _instance;
-//    }
-    
-    public String chainFile;
-    public Blockchain(String chainFile) {
-        super();
+    private static HashMap<String, Blockchain> instances = new HashMap<>();
+    private String chainFile;
+    private LinkedList<Block> db;
+
+    private Blockchain(String chainFile) {
         this.chainFile = chainFile;
-        System.out.println( "> Blockchain object is created!" );
+        if (isFileExist(chainFile)) {
+            this.db = get();
+        } else {
+            genesis();
+        }
+        System.out.println("> Blockchain object is created!");
     }
-    
-    public void genesis() {
+
+    public static synchronized Blockchain getInstance(String chainFile) {
+        if (!instances.containsKey(chainFile)) {
+            Blockchain instance = new Blockchain(chainFile);
+            if (!new File(chainFile).exists()) {
+                instance.genesis();
+            }
+            instances.put(chainFile, instance);
+        }
+        return instances.get(chainFile);
+    }
+
+    private boolean isFileExist(String fileName) {
+        File file = new File(fileName);
+        return file.exists() && !file.isDirectory();
+    }
+
+    private void genesis() {
         Block genesis = new Block(0, "0");
-        db.add(genesis);
-        persist();
-    }
-  
-    public void nextBlock(Block newBlock) {
-        db = get();
-        int newIndex = db.size(); // Get the size of the current blockchain
-        newBlock.getBlockHeader().setIndex(newIndex); // Set the new index value for the block
-        db.add(newBlock);
+        this.db = new LinkedList<>();
+        this.db.add(genesis);
         persist();
     }
 
-    public LinkedList<Block> get()
-    {
-        try( FileInputStream fin = new FileInputStream( this.chainFile ); 
-             ObjectInputStream in = new ObjectInputStream( fin );
-            ) {
-            return (LinkedList<Block>)in.readObject();
+    public void nextBlock(Block newBlock) {
+        int newIndex = this.db.size();
+        newBlock.getBlockHeader().setIndex(newIndex);
+        this.db.add(newBlock);
+        persist();
+    }
+
+    public LinkedList<Block> get() {
+        if (this.db == null) {
+            try (FileInputStream fin = new FileInputStream(chainFile);
+                 ObjectInputStream in = new ObjectInputStream(fin)) {
+                this.db = (LinkedList<Block>) in.readObject();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return this.db;
+    }
+
+    private void persist() {
+        try (FileOutputStream fout = new FileOutputStream(chainFile);
+             ObjectOutputStream out = new ObjectOutputStream(fout)) {
+            out.writeObject(this.db);
+            System.out.println(">> Master file is updated!");
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
     }
-    
-    private void persist()
-    {
-        try( FileOutputStream fout = new FileOutputStream( this.chainFile );
-             ObjectOutputStream out = new ObjectOutputStream( fout );
-            ) {
-            out.writeObject(db);
-            System.out.println( ">> Master file is updated!" );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
+
     public void updateBlock(int index, Block updatedBlock) {
-        if (index >= 0 && index < db.size()) {
-            db.set(index, updatedBlock);
+        if (index >= 0 && index < this.db.size()) {
+            this.db.set(index, updatedBlock);
             persist();
         } else {
             System.out.println(">> Invalid block index provided!");
         }
     }
-    
-    /**     * distribute()     */
-    public void distribute(){
-        String chain = new GsonBuilder().setPrettyPrinting().create().toJson(db);
-        System.out.println(chain);
-    }
 
+    public void distribute() {
+        LinkedList<Block> chain = get();
+        String chainJson = new GsonBuilder().setPrettyPrinting().create().toJson(chain);
+        System.out.println(chainJson);
+    }
 }

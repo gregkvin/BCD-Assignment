@@ -22,9 +22,8 @@ public class BlockLogic {
     public static String certBlock = masterFolder+"/course_certificate.bin";
     public static String courseBlock = masterFolder+"/course_completion.bin";
     
-    public void userBlock(User user){
-        
-        Blockchain bc = new Blockchain(userBlock);
+    public void userBlock(User user) {
+        Blockchain bc = Blockchain.getInstance(userBlock);
         Transaction previousTranxLst = bc.get().getLast().tranxLst;
         Transaction newTranxLst = new Transaction(10);
         if (previousTranxLst != null) {
@@ -42,7 +41,7 @@ public class BlockLogic {
     }
     
     public void courseBlock(Completion c){
-        Blockchain bc = new Blockchain(courseBlock);
+        Blockchain bc = Blockchain.getInstance(courseBlock);
         Transaction previousTranxLst = bc.get().getLast().tranxLst;
         Transaction newTranxLst = new Transaction(10);
         if (previousTranxLst != null) {
@@ -84,7 +83,7 @@ public class BlockLogic {
 
     
     public void updateData(String id, String newData) {
-        Blockchain bc = new Blockchain(userBlock);
+        Blockchain bc = Blockchain.getInstance(userBlock);
         Block lastBlock = bc.get().getLast();
         Transaction tranxLst = lastBlock.getTranxLst();
 
@@ -115,7 +114,7 @@ public class BlockLogic {
 
     
     public void certBlock(){
-        Blockchain bc = new Blockchain(certBlock);
+        Blockchain bc = Blockchain.getInstance(certBlock);
         Transaction previousTranxLst = bc.get().getLast().tranxLst;
         Transaction newTranxLst = new Transaction(10);
         if (previousTranxLst != null) {

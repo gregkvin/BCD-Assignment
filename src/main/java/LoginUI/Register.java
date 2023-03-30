@@ -307,7 +307,7 @@ public class Register extends javax.swing.JFrame {
             Logger.getLogger(Add_User.class.getName()).log(Level.SEVERE, null, ex);
         }
         }*/
-        Blockchain userBlockchain = new Blockchain(userBlock);
+        Blockchain userBlockchain = Blockchain.getInstance(userBlock);
         UUID uuid = UUID.randomUUID();
         String randomId = uuid.toString();
         System.out.println(randomId);

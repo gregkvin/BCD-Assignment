@@ -25,20 +25,22 @@ public class BlockchainAssignment {
      */
     public static void main(String[] args) {
         
-        Blockchain bc = new Blockchain(userBlock);
-        Blockchain bc2 = new Blockchain(certBlock);
-        Blockchain bc3 = new Blockchain(courseBlock);
-        String chain = new GsonBuilder().setPrettyPrinting().create().toJson(userBlock);
-        System.out.println(chain);
-        if ( !new File(masterFolder).exists() ) {
-            System.err.println( "> creating Blockchain binary !" );
-            new File(masterFolder).mkdir();
-            bc.genesis();
-            bc2.genesis();
-            bc3.genesis();
-        }
+
+    if (!new File(masterFolder).exists()) {
+        System.err.println("> creating Blockchain binary!");
+        new File(masterFolder).mkdir();
+    }
+    
+    Blockchain userBlockchain = Blockchain.getInstance(userBlock);
+    //Blockchain digiCertBlockchain = Blockchain.getInstance(digiCertBlock);
+    Blockchain certBlockchain = Blockchain.getInstance(certBlock);
+    Blockchain courseBlockchain = Blockchain.getInstance(courseBlock);
+
+
+    String chain = new GsonBuilder().setPrettyPrinting().create().toJson(userBlockchain.get());
+    System.out.println(chain);
         
-        MainMenu form = new MainMenu();
+    MainMenu form = new MainMenu();
         form.setVisible(true);
     }
     
