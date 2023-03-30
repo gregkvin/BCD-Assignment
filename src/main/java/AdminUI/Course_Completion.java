@@ -5,11 +5,25 @@
  */
 package AdminUI;
 
+import Blockchain.BlockLogic;
+import static Blockchain.BlockLogic.courseBlock;
+import Blockchain.Blockchain;
 import LoginUI.Login;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -19,9 +33,9 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author gregoriuskevin
  */
-public class Admin_Certificates extends javax.swing.JFrame {
+public class Course_Completion extends javax.swing.JFrame {
 
-    public Admin_Certificates() throws IOException {
+    public Course_Completion() throws IOException {
         initComponents();
         loadtable();
         setResizable(false);
@@ -31,11 +45,29 @@ public class Admin_Certificates extends javax.swing.JFrame {
   
     
 
-    
-    private void loadtable() throws IOException{
+    public DefaultTableModel tableModel = new DefaultTableModel();
+    private void loadtable() throws IOException {
+        Blockchain userBlockchain = Blockchain.getInstance(courseBlock);
+        List<String> dataList = userBlockchain.getLastBlockData();
 
-        
+        tableModel.addColumn("Credential ID");
+        tableModel.addColumn("Student Name");
+        tableModel.addColumn("Course Name");
+        tableModel.addColumn("Date of Completion");
+        tableModel.addColumn("Passing Grade");
+        tableModel.addColumn("Grade");
+        tableModel.addColumn("Approval");
+
+        for (String data : dataList) {
+            String[] splitData = data.split("\\|");
+            if (splitData[splitData.length - 1].equals("Unapproved")) {
+                tableModel.addRow(splitData);
+            }       
+        }
+
+        jTable.setModel(tableModel);
     }
+
     
     
     
@@ -70,9 +102,11 @@ public class Admin_Certificates extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        centreeee = new javax.swing.JTable();
+        jTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jButton7 = new javax.swing.JButton();
+        approveButton = new javax.swing.JButton();
+        rejectButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -109,44 +143,61 @@ public class Admin_Certificates extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        centreeee.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        centreeee.setModel(new javax.swing.table.DefaultTableModel(
+        jTable.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        jTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Course ID", "Course Name", "Description", "Passing Grade"
+                "Credential ID", "Student Name", "Course Name", "Data of Completion", "Passing Grade", "Grade", "Approval"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, true, false, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        centreeee.addMouseListener(new java.awt.event.MouseAdapter() {
+        jTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                centreeeeMouseClicked(evt);
+                jTableMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(centreeee);
+        jScrollPane1.setViewportView(jTable);
 
         jLabel2.setFont(new java.awt.Font("Poppins", 2, 10)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 102, 51));
         jLabel2.setText("• BLOCKCHAIN E-CERTIFICATE SYSTEM");
 
-        jButton7.setBackground(new java.awt.Color(255, 255, 255));
         jButton7.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jButton7.setForeground(new java.awt.Color(0, 102, 51));
         jButton7.setText("Back");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
+            }
+        });
+
+        approveButton.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        approveButton.setForeground(new java.awt.Color(0, 102, 51));
+        approveButton.setText("Approve");
+        approveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                approveButtonActionPerformed(evt);
+            }
+        });
+
+        rejectButton.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        rejectButton.setForeground(new java.awt.Color(0, 102, 51));
+        rejectButton.setText("Reject");
+        rejectButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rejectButtonActionPerformed(evt);
             }
         });
 
@@ -157,10 +208,14 @@ public class Admin_Certificates extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 906, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1010, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(rejectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(approveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -170,11 +225,13 @@ public class Admin_Certificates extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jButton7))
+                    .addComponent(jButton7)
+                    .addComponent(approveButton)
+                    .addComponent(rejectButton))
                 .addGap(18, 18, 18))
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -254,7 +311,7 @@ public class Admin_Certificates extends javax.swing.JFrame {
                     remove(yesno);
                 }
             } catch (IOException ex) {
-                Logger.getLogger(Admin_Certificates.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Course_Completion.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
@@ -273,9 +330,9 @@ public class Admin_Certificates extends javax.swing.JFrame {
 //        }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    private void centreeeeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_centreeeeMouseClicked
+    private void jTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableMouseClicked
         
-    }//GEN-LAST:event_centreeeeMouseClicked
+    }//GEN-LAST:event_jTableMouseClicked
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
@@ -283,6 +340,92 @@ public class Admin_Certificates extends javax.swing.JFrame {
         String user1 = jMenu1.getText();
         new Admin_Menu(user1).setVisible(true);
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void approveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_approveButtonActionPerformed
+        int selectedRow = jTable.getSelectedRow();
+        if (selectedRow != -1) {
+            // Update the table model
+            BlockLogic bl = new BlockLogic();
+            String id = (String) jTable.getValueAt(selectedRow, 0);
+            String name = (String) jTable.getValueAt(selectedRow, 1);
+            String course = (String) jTable.getValueAt(selectedRow, 2);
+            String DoB = (String) jTable.getValueAt(selectedRow, 3);
+            String passingGrade = (String) jTable.getValueAt(selectedRow, 4);
+            String grade = (String) jTable.getValueAt(selectedRow, 5);
+        
+            // Generate a public-private key pair for the administrator
+            KeyPairGenerator keyGen = null;
+            try {
+                keyGen = KeyPairGenerator.getInstance("RSA");
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(Course_Completion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            keyGen.initialize(2048);
+            KeyPair keyPair = keyGen.generateKeyPair();
+            PublicKey publicKey = keyPair.getPublic();
+            PrivateKey privateKey = keyPair.getPrivate();
+
+            // Create a digital signature using the private key
+            Signature signer = null;
+            try {
+                signer = Signature.getInstance("SHA256withRSA");
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(Course_Completion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                signer.initSign(privateKey);
+            } catch (InvalidKeyException ex) {
+                Logger.getLogger(Course_Completion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            String certData = name + "|" + course + "|" + grade + "|" + DoB;
+            byte[] dataBytes = null;
+            try {
+                dataBytes = certData.getBytes("UTF-8");
+            } catch (UnsupportedEncodingException ex) {
+                Logger.getLogger(Course_Completion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                signer.update(dataBytes);
+            } catch (SignatureException ex) {
+                Logger.getLogger(Course_Completion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            byte[] signatureBytes = null;
+            try {
+                signatureBytes = signer.sign();
+            } catch (SignatureException ex) {
+                Logger.getLogger(Course_Completion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            String signature = Base64.getEncoder().encodeToString(signatureBytes);
+            bl.updateCompletionWithSignature(id, certData, signature);
+            
+            String newData = name + "|" + course + "|" + DoB + "|" + passingGrade + "|" + grade + "|" + "Approved";
+            bl.updateCompletion(id, newData);
+            tableModel.setValueAt("Approved", selectedRow, 6);
+            tableModel.removeRow(selectedRow);
+        }
+    }//GEN-LAST:event_approveButtonActionPerformed
+
+    
+    
+    private void rejectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rejectButtonActionPerformed
+        int selectedRow = jTable.getSelectedRow();
+        if (selectedRow != -1) {
+            // Update the table model
+            BlockLogic bl = new BlockLogic();
+            String id = (String) jTable.getValueAt(selectedRow, 0);
+            String name = (String) jTable.getValueAt(selectedRow, 1);
+            String course = (String) jTable.getValueAt(selectedRow, 2);
+            String DoB = (String) jTable.getValueAt(selectedRow, 3);
+            String passingGrade = (String) jTable.getValueAt(selectedRow, 4);
+            String grade = (String) jTable.getValueAt(selectedRow, 5);
+        
+            String newData = name + "|" + course + "|" + DoB + "|" + passingGrade + "|" + grade + "|" + "Rejected";
+            bl.updateCompletion(id, newData);
+            tableModel.setValueAt("Rejected", selectedRow, 6);
+            tableModel.removeRow(selectedRow);
+        }
+    }//GEN-LAST:event_rejectButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -301,14 +444,78 @@ public class Admin_Certificates extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Admin_Certificates.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Course_Completion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Admin_Certificates.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Course_Completion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Admin_Certificates.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Course_Completion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Admin_Certificates.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Course_Completion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -379,16 +586,16 @@ public class Admin_Certificates extends javax.swing.JFrame {
             public void run() {
                 String user1 = null;
                 try {
-                    new Admin_Certificates().setVisible(true);
+                    new Course_Completion().setVisible(true);
                 } catch (IOException ex) {
-                    Logger.getLogger(Admin_Certificates.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Course_Completion.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable centreeee;
+    private javax.swing.JButton approveButton;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel2;
@@ -407,5 +614,7 @@ public class Admin_Certificates extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable;
+    private javax.swing.JButton rejectButton;
     // End of variables declaration//GEN-END:variables
 }

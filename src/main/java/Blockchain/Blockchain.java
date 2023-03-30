@@ -17,6 +17,8 @@ import java.util.LinkedList;
 import java.util.HashMap;
 import com.google.gson.GsonBuilder;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Blockchain {
     private static HashMap<String, Blockchain> instances = new HashMap<>();
@@ -98,5 +100,13 @@ public class Blockchain {
         LinkedList<Block> chain = get();
         String chainJson = new GsonBuilder().setPrettyPrinting().create().toJson(chain);
         System.out.println(chainJson);
+    }
+    
+    public List<String> getLastBlockData() {
+        LinkedList<Block> db = get();
+        if (db != null && !db.isEmpty()) {
+            return db.getLast().tranxLst.getDataLst();
+        }
+        return new ArrayList<>();
     }
 }

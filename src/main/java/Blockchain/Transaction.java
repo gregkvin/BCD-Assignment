@@ -34,6 +34,11 @@ public class Transaction implements Serializable{
         this.SIZE = size;
     }
     
+    public Transaction(List<String> dataLst) {
+        this.dataLst = new ArrayList<>(dataLst);
+        calculateMerkleRoot();
+    }
+    
     public ArrayList<String> getDataLst() {
         return dataLst;
     }
