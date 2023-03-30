@@ -7,6 +7,7 @@ package Blockchain;
 import Class.User;
 import java.io.File;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -38,27 +39,59 @@ public class BlockLogic {
         bc.distribute();
     }
     
-    public User findUser(String username, String password, Blockchain bc) {
+    public User loginUser(String username, String password, Blockchain bc) {
         LinkedList<Block> chain = bc.get();
-    
-        for (Block block : chain) {
-            Transaction transactionList = block.tranxLst;
-            if (transactionList != null) {
-                for (String data : transactionList.getDataLst()) {
-                    String[] parts = data.split("\\|");
-                    System.out.println(parts[1]);
-                    if (parts.length >= 5) {
-                        if (parts[1].equals(username) && parts[3].equals(password)) {
-                            User user = new User(parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6]);
-                            return user;
-                        }
+
+        // Get the last block in the chain
+        Block lastBlock = chain.getLast();
+
+        Transaction transactionList = lastBlock.tranxLst;
+        if (transactionList != null) {
+            for (String data : transactionList.getDataLst()) {
+                String[] parts = data.split("\\|");
+                System.out.println(parts[1]);
+                if (parts.length >= 5) {
+                    if (parts[1].equals(username) && parts[3].equals(password)) {
+                        User user = new User(parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6]);
+                        return user;
                     }
                 }
             }
         }
-    
+
         return null;
     }
+
+    
+    public void updateData(String id, String newData) {
+        Blockchain bc = Blockchain.getInstance(userBlock);
+        Block lastBlock = bc.get().getLast();
+        Transaction tranxLst = lastBlock.getTranxLst();
+
+        int index = -1;
+        for (int i = 0; i < tranxLst.getDataLst().size(); i++) {
+            String[] parts = tranxLst.getDataLst().get(i).split("\\|");
+            if (parts[0].equals(id)) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index != -1) {
+            String oldData = tranxLst.getDataLst().get(index);
+            String updatedData = id + "|" + newData;
+            tranxLst.getDataLst().set(index, updatedData);
+
+            // Create a new block with the updated transaction list
+            Block newBlock = new Block(lastBlock.getBlockHeader().getIndex() + 1, lastBlock.getBlockHeader().getPreviousHash());
+            newBlock.setTranxLst(tranxLst);
+
+            // Add the new block to the blockchain
+            bc.nextBlock(newBlock);
+       }
+        bc.distribute();
+    }
+
     
     public void certBlock(){
         Blockchain bc = Blockchain.getInstance( certBlock );

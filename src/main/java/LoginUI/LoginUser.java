@@ -260,51 +260,16 @@ public class LoginUser extends javax.swing.JFrame {
     }//GEN-LAST:event_usernameActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-//        try {                                         
-//            // TODO add your handling code here:
-//            LoginUser lo = new LoginUser();
-//            FileHandle fh = new FileHandle();
-//            AdminRecord ar = new AdminRecord();
-//            Hasher h = new Hasher();
-//            byte[] salt = Salt.generate();
-//            String path = "admin.txt";
-//            String[] usernamee = ar.readUsername(path);
-//            String[] passwordd = ar.readPassword(path);
-//            //User read = new User();
-//            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-//            LocalDateTime now = LocalDateTime.now();
-//            boolean boo = lo.checkPass(usernamee, username.getText(),String.valueOf(password.getPassword()), passwordd);
-//            System.out.println(boo);
-//            if(boo == true) {
-//                String user1 = username.getText();
-//                String[] input = {user1, "User login successful.", dtf.format(now)};
-//                //fh.LoggingActivity(input);
-//                dispose();
-//                JOptionPane.showMessageDialog(null, "Login successfully, please proceed!");
-//                new Admin_Menu(user1).setVisible(true);
-//                
-//            }
-//            
-//            else {
-//                JOptionPane.showMessageDialog(null, "Invalid password", "Error", JOptionPane.ERROR_MESSAGE);
-//            }
-//        } catch (IOException ex) {
-//            Logger.getLogger(LoginUser.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (NoSuchAlgorithmException ex) {
-//            Logger.getLogger(LoginUser.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (NoSuchPaddingException ex) {
-//            Logger.getLogger(LoginUser.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-
         BlockLogic bl = new BlockLogic();
 
         Blockchain userBlockchain = Blockchain.getInstance(userBlock);
         
-        User foundUser = bl.findUser(username.getText(), String.valueOf(password.getPassword()), userBlockchain);
+        User foundUser = bl.loginUser(username.getText(), String.valueOf(password.getPassword()), userBlockchain);
         
         if (foundUser != null) {
             System.out.println("User found: " + foundUser);
-            new User_Menu().setVisible(true);
+            
+            new User_Menu(foundUser).setVisible(true);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

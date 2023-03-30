@@ -70,6 +70,15 @@ public class Blockchain {
         }
     }
     
+    public void updateBlock(int index, Block updatedBlock) {
+        if (index >= 0 && index < db.size()) {
+            db.set(index, updatedBlock);
+            persist();
+        } else {
+            System.out.println(">> Invalid block index provided!");
+        }
+    }
+    
     /**     * distribute()     */
     public void distribute(){
         String chain = new GsonBuilder().setPrettyPrinting().create().toJson(db);

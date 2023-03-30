@@ -34,6 +34,7 @@ public class Block implements Serializable{
     /* composition relationship - inner class definition for part object*/
     public class Header implements Serializable{
         //data member
+        private static final long serialVersionUID = 1L;
         private int index;
         private String currentHash, previousHash;
         private long timestamp;
@@ -66,6 +67,9 @@ public class Block implements Serializable{
         public void setIndex(int index) {
             this.index = index;
         }
+        public int getIndex() {
+            return index;
+        }
 
         
     }
@@ -77,6 +81,10 @@ public class Block implements Serializable{
         if (tranxLst != null) {
             tranxLst.calculateMerkleRoot();
         }
+    }
+    
+    public Transaction getTranxLst() {
+        return tranxLst;
     }
     @Override
     public String toString() {

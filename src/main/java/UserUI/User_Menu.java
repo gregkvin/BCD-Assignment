@@ -5,6 +5,7 @@
  */
 package UserUI;
 
+import Class.User;
 import LoginUI.Login;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -19,9 +20,12 @@ import javax.swing.JOptionPane;
  */
 public class User_Menu extends javax.swing.JFrame {
 
-    public User_Menu() {
+    private User user;
+    
+    public User_Menu(User user) {
         initComponents();
         setResizable(false);
+        this.user = user;
         //jMenu1.setText(user1);
     }
     
@@ -95,7 +99,6 @@ public class User_Menu extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setBackground(new java.awt.Color(255, 255, 255));
         jButton2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 102, 1));
         jButton2.setText("Take Course");
@@ -105,7 +108,6 @@ public class User_Menu extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setBackground(new java.awt.Color(255, 255, 255));
         jButton3.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 102, 1));
         jButton3.setText("View Certificates");
@@ -243,7 +245,13 @@ public class User_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
+        try {
+            // TODO add your handling code here:
+            dispose();
+            new User_Detail(user).setVisible(true);
+        } catch (IOException ex) {
+            Logger.getLogger(User_Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -292,12 +300,11 @@ public class User_Menu extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                String user1 = null;
-                new User_Menu().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new User_Menu(id).setVisible(true);
+//            }
+//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

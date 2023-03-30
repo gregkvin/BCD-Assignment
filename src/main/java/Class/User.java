@@ -14,9 +14,7 @@ public class User implements Serializable {
     private String gender;
     private String dateOfBirth;
     private String email;
-//    private String publicKey;
-//    private String hashOfCertificate;
-//    private boolean validatorStatus;
+    private int blockIndex;
 
     // Constructor
     public User(String ID, String username, String fullName, String password, String gender, String dateOfBirth, String email) {
@@ -27,9 +25,6 @@ public class User implements Serializable {
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
-//        this.publicKey = publicKey;
-//        this.hashOfCertificate = hashOfCertificate;
-//        this.validatorStatus = validatorStatus;
     }
 
     // Add getters and setters for each field here
@@ -39,28 +34,56 @@ public class User implements Serializable {
         return ID;
     }
     
+    public void setID(String ID) {
+        this.ID = ID;
+    }
+    
     public String getUsername(){
         return username;
+    }
+    
+    public void setUsername(String username) {
+        this.username = username;
     }
     
     public String getFullName(){
         return fullName;
     }
     
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+    
     public String getPassword(){
         return password;
+    }
+    
+    public void setPasword(String password) {
+        this.password = password;
     }
     
     public String getGender(){
         return gender;
     }
     
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+    
     public String getDoB(){
         return dateOfBirth;
     }
     
+    public void setDoB(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+    
     public String getEmail(){
         return email;
+    }
+    
+    public void setEmail(String email) {
+        this.email = email;
     }
     
     @Override

@@ -127,7 +127,7 @@ public class MainMenu extends javax.swing.JFrame {
         // TODO add your handling code here:
          dispose();
 //         new LoginUser().setVisible(true);
-         new Login().setVisible(true);
+         new LoginUser().setVisible(true);
     }//GEN-LAST:event_personnelActionPerformed
 
     private void citizensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_citizensActionPerformed
