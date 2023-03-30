@@ -364,8 +364,10 @@ public class Course_Completion extends javax.swing.JFrame {
             KeyPair keyPair = keyGen.generateKeyPair();
             PublicKey publicKey = keyPair.getPublic();
             PrivateKey privateKey = keyPair.getPrivate();
-            
-            bl.updateCompletionWithSignature(id, certData, signature);
+            byte[] publicKeyBytes = publicKey.getEncoded();
+            String publicKeyString = Base64.getEncoder().encodeToString(publicKeyBytes);
+           
+            bl.updatePublicKey(id, publicKeyString);
 
             // Create a digital signature using the private key
             Signature signer = null;

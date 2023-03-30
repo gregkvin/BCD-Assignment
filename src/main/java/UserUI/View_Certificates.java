@@ -45,6 +45,7 @@ public class View_Certificates extends javax.swing.JFrame {
     CourseRecord cr = new CourseRecord();
     String path = "course.txt";
     private User user;
+    private String courseID;
     
     class HeaderRenderer extends JLabel implements TableCellRenderer {
 
@@ -106,25 +107,27 @@ public class View_Certificates extends javax.swing.JFrame {
         Blockchain certBlockchain = Blockchain.getInstance(certBlock);
         List<Block> certBlocks = certBlockchain.get();
 
+        tableModel.addColumn("ID");
         tableModel.addColumn("Course Name");
 
         for (Block block : certBlocks) {
             Transaction tranxLst = block.getTranxLst();
-            
+
             if (tranxLst == null) {
                 continue;
             }
-            
+
             ArrayList<String> dataList = tranxLst.getDataLst();
 
             for (String data : dataList) {
                 String[] splitData = data.split("\\|");
 
+                String id = splitData[0];
                 String fullName = splitData[1];
                 String courseName = splitData[2];
 
                 if (fullName.equals(user.getFullName())) {
-                    String[] rowData = new String[]{courseName};
+                    String[] rowData = new String[]{id, courseName};
                     tableModel.addRow(rowData);
                 }
             }
@@ -132,7 +135,24 @@ public class View_Certificates extends javax.swing.JFrame {
 
         jTable1.setModel(tableModel);
         
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                int selectedRow = jTable1.getSelectedRow();
+
+                    if (selectedRow != -1) {
+                        courseID = (String) jTable1.getValueAt(selectedRow, 0); // Get the ID from the first column
+                        String courseName = (String) jTable1.getValueAt(selectedRow, 1);
+                        // Add any other columns you need to retrieve
+
+                        // Perform any other actions you need with the selected data
+                    }
+                }
+            }
+        });
     }
+    
     
     
     
@@ -403,7 +423,7 @@ public class View_Certificates extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         dispose();
         try {
-            new Certificate().setVisible(true);
+            new Certificate(courseID).setVisible(true);
         } catch (IOException ex) {
             Logger.getLogger(View_Certificates.class.getName()).log(Level.SEVERE, null, ex);
         }

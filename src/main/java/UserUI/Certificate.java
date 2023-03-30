@@ -8,6 +8,7 @@ package UserUI;
 import AdminUI.*;
 import Blockchain.Block;
 import static Blockchain.BlockLogic.certBlock;
+import static Blockchain.BlockLogic.publicKeyBlock;
 import Blockchain.Blockchain;
 import Blockchain.Transaction;
 import Class.Course;
@@ -18,6 +19,14 @@ import com.mycompany.bcd.assignment.FileHandle;
 import java.awt.Component;
 import java.awt.Font;
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -46,40 +55,78 @@ public class Certificate extends javax.swing.JFrame {
     CourseRecord cr = new CourseRecord();
     String path = "course.txt";
 //    private User user;
+    private String id;
+    private String signature;
     
-    public Certificate() throws IOException {
+    public Certificate(String id) throws IOException {
         initComponents();
         cert.setLineWrap(true);
         cert.setWrapStyleWord(true);
 //        this.user = user;
-        loadtable();
+        loadtable(id);
         setResizable(false);
         
     }
 
     
-    private void loadtable() throws IOException{
+    private void loadtable(String id) throws IOException {
+        Blockchain certBlockchain = Blockchain.getInstance(certBlock);
+        List<Block> certBlocks = certBlockchain.get();
 
-        String certificateText = "==================================\n" +
-                         "\tCertificate\n" +
-                         "==================================\n" +
-                         "\n" +
-                         "           Introduction to Web Development\n" +
-                         "\n" +
-                         "           Credential: asdffafdsf\n" +
-                         "\n" +
-                         "             Name: I Putu Bagus Widia\n" +
-                         "            \n" +
-                         "             Date: 2023/03/30\n" +
-                         "\n" +
-                         "            Grade: 100\n" +
-                         "\n" +
-                         "==================================\n" +
-                         "\tCongratulations!\n" +
-                         "==================================";
+        String certificateText = "";
 
-        cert.setText(certificateText); 
+        for (Block block : certBlocks) {
+            Transaction tranxLst = block.getTranxLst();
+
+            if (tranxLst == null) {
+                continue;
+            }
+
+            ArrayList<String> dataList = tranxLst.getDataLst();
+
+            for (String data : dataList) {
+                String[] splitData = data.split("\\|");
+
+                String certId = splitData[0];
+
+                if (certId.equals(id)) {
+                    String fullName = splitData[1];
+                    String courseName = splitData[2];
+                    String grade = splitData[3];
+                    String date = splitData[4];
+                    signature = splitData[5];
+
+                    certificateText = "==================================\n" +
+                                  "\tCertificate\n" +
+                                  "==================================\n" +
+                                  "\n" +
+                                  "           " + courseName + "\n" +
+                                  "\n" +
+                                  "           Credential: " + id + "\n" +
+                                  "\n" +
+                                  "             Name: " + fullName + "\n" +
+                                  "            \n" +
+                                  "             Date: " + date + "\n" +
+                                  "\n" +
+                                  "            Grade: " + grade + "\n" +
+                                  "\n" +
+                                  "==================================\n" +
+                                  "\tCongratulations!\n" +
+                                  "==================================";
+
+                    break;
+                }
+            }
+
+            // If certificate text is found, no need to keep searching
+            if (!certificateText.isEmpty()) {
+                break;
+            }
+        }
+
+        cert.setText(certificateText);
     }
+
     
     
     
@@ -317,24 +364,96 @@ public class Certificate extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        int selectedRow = jTable1.getSelectedRow();
+        Blockchain certBlockchain = Blockchain.getInstance(certBlock);
+        Blockchain pk = Blockchain.getInstance(publicKeyBlock);
+        
+        String signatureBase64 = null;
+        String publicKeyString = null;
 
-        if (selectedRow != -1) {
-            try {
-                // Get the Course object from the list using the selected row index
-                Course c = courses.get(selectedRow);
-
-                // Do whatever you want with the Course object here
-                System.out.println(c.toString());
-                dispose();
-                new User_Course(c, user).setVisible(true);
-
-            } catch (Exception ex) {
-                // Handle exceptions if needed
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Please select a row in the table.");
+        // Step 1: Iterate through the blocks to find the matching data
+        for (Block certBlock : certBlockchain.get()) {
+        Transaction tranxLst = certBlock.getTranxLst();
+        // Extract the certificate data
+        // Assuming the certificate data has the format: "ID|Signature"
+        
+        if (tranxLst == null) {
+            continue;
         }
+        
+        String[] certData = certBlock.getTranxLst().getDataLst().get(0).split("\\|");
+            if (certData[0].equals(id)) {
+                signatureBase64 = certData[1];
+                break;
+            }
+        }
+
+        for (Block publicKeyBlock : pk.get()) {
+            
+        Transaction tranxLst = publicKeyBlock.getTranxLst();
+    
+        if (tranxLst == null) {
+            continue;
+        }
+        // Extract the public key data
+        // Assuming the public key data has the format: "ID|PublicKey"
+        String[] publicKeyData = publicKeyBlock.getTranxLst().getDataLst().get(0).split("\\|");
+            if (publicKeyData[0].equals(id)) {
+                publicKeyString = publicKeyData[1];
+                break;
+            }
+        }
+
+        // Step 2: The signature and public key are already extracted
+        if (signatureBase64 == null || publicKeyString == null) {
+            System.out.println("Error: Signature or public key not found.");
+            // Handle the error, e.g., display an error message or return
+            return;
+        }
+
+        // Step 3: Decode the Base64 encoded signature and public key
+        byte[] signatureBytes = Base64.getDecoder().decode(signatureBase64);
+        byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyString);
+
+        // Step 4: Verify the signature using the decoded public key and original data
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
+        KeyFactory keyFactory = null;
+        try {
+            keyFactory = KeyFactory.getInstance("RSA");
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Certificate.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        PublicKey publicKey = null;
+        try {
+            publicKey = keyFactory.generatePublic(keySpec);
+        } catch (InvalidKeySpecException ex) {
+            Logger.getLogger(Certificate.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        Signature signature = null;
+        try {
+            signature = Signature.getInstance("SHA256withRSA");
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Certificate.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            signature.initVerify(publicKey);
+        } catch (InvalidKeyException ex) {
+            Logger.getLogger(Certificate.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        byte originalData = 0;
+        try {
+            signature.update(originalData);
+        } catch (SignatureException ex) {
+            Logger.getLogger(Certificate.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        boolean isSignatureValid = false;
+        try {
+            isSignatureValid = signature.verify(signatureBytes);
+        } catch (SignatureException ex) {
+            Logger.getLogger(Certificate.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        System.out.println("Is the signature valid? " + isSignatureValid);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
