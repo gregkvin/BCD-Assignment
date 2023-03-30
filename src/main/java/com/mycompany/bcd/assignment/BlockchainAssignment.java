@@ -10,6 +10,7 @@ import static Blockchain.BlockLogic.certBlock;
 import static Blockchain.BlockLogic.courseBlock;
 import static Blockchain.BlockLogic.masterFolder;
 import static Blockchain.BlockLogic.userBlock;
+import static Blockchain.BlockLogic.publicKeyBlock;
 import LoginUI.MainMenu;
 import com.google.gson.GsonBuilder;
 import java.io.File;
@@ -32,10 +33,9 @@ public class BlockchainAssignment {
     }
     
     Blockchain userBlockchain = Blockchain.getInstance(userBlock);
-    //Blockchain digiCertBlockchain = Blockchain.getInstance(digiCertBlock);
     Blockchain certBlockchain = Blockchain.getInstance(certBlock);
     Blockchain courseBlockchain = Blockchain.getInstance(courseBlock);
-
+    Blockchain publicKey = Blockchain.getInstance(publicKeyBlock);
 
     String chain = new GsonBuilder().setPrettyPrinting().create().toJson(userBlockchain.get());
     System.out.println(chain);

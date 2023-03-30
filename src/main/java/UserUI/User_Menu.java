@@ -266,7 +266,13 @@ public class User_Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-
+        try {
+            // TODO add your handling code here:
+            dispose();
+            new View_Certificates(user).setVisible(true);
+        } catch (IOException ex) {
+            Logger.getLogger(User_Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

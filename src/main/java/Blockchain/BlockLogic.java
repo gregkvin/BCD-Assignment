@@ -20,7 +20,7 @@ public class BlockLogic {
     public static String masterFolder = "src/main/java/master";
     public static String userBlock = masterFolder+"/user_information.bin";
     public static String certBlock = masterFolder+"/digital_certificate.bin";
-    public static String publicKey = masterFolder+"/public_key.bin";
+    public static String publicKeyBlock = masterFolder+"/public_key.bin";
     public static String courseBlock = masterFolder+"/course_completion.bin";
     
     public void userBlock(User user) {
@@ -212,6 +212,25 @@ public class BlockLogic {
             }
         }
         String updatedData = id + "|" + newData + "|" + signature;
+        newTranxLst.add(updatedData);
+        String previousHash = bc.get().getLast().getBlockHeader().getCurrentHash();
+        Block b1 = new Block(bc.get().size(), previousHash);
+        b1.setTranxLst(newTranxLst);
+        bc.nextBlock(b1);
+        bc.distribute();
+    }
+    
+    public void updatePublicKey(String id, String pk) {
+        // Get the certBlock blockchain instance
+        Blockchain bc = Blockchain.getInstance(publicKeyBlock);
+        Transaction previousTranxLst = bc.get().getLast().tranxLst;
+        Transaction newTranxLst = new Transaction(10);
+        if (previousTranxLst != null) {
+            for (String t : previousTranxLst.getDataLst()) {
+                newTranxLst.add(t);
+            }
+        }
+        String updatedData = id + "|" + pk;
         newTranxLst.add(updatedData);
         String previousHash = bc.get().getLast().getBlockHeader().getCurrentHash();
         Block b1 = new Block(bc.get().size(), previousHash);
