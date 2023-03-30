@@ -307,7 +307,7 @@ public class Register extends javax.swing.JFrame {
             Logger.getLogger(Add_User.class.getName()).log(Level.SEVERE, null, ex);
         }
         }*/
-        
+        Blockchain userBlockchain = new Blockchain(userBlock);
         UUID uuid = UUID.randomUUID();
         String randomId = uuid.toString();
         System.out.println(randomId);
@@ -319,7 +319,7 @@ public class Register extends javax.swing.JFrame {
         String Email = email.getText();
         BlockLogic cb = new BlockLogic();
         User user = new User(randomId,  userName, fullName, pwd, Gender, DoB, Email);
-        if (cb.isUserDuplicate(user, Blockchain.getInstance(userBlock))) {
+        if (cb.isUserDuplicate(user, userBlockchain)) {
             JOptionPane.showMessageDialog(null, "This user already registered!");
         } else{
             cb.userBlock(user);

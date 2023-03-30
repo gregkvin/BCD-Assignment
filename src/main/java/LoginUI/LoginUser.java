@@ -262,7 +262,7 @@ public class LoginUser extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         BlockLogic bl = new BlockLogic();
 
-        Blockchain userBlockchain = Blockchain.getInstance(userBlock);
+        Blockchain userBlockchain = new Blockchain(userBlock);
         
         User foundUser = bl.loginUser(username.getText(), String.valueOf(password.getPassword()), userBlockchain);
         

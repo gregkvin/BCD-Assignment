@@ -4,6 +4,7 @@
  */
 package Blockchain;
 
+import Class.Completion;
 import Class.User;
 import java.io.File;
 import java.util.LinkedList;
@@ -17,10 +18,13 @@ public class BlockLogic {
 
     public static String masterFolder = "src/main/java/master";
     public static String userBlock = masterFolder+"/user_information.bin";
-    public static String certBlock = masterFolder+"/digital_certificate.bin";
+    public static String digiCertBlock = masterFolder+"/digital_certificate.bin";
+    public static String certBlock = masterFolder+"/course_certificate.bin";
+    public static String courseBlock = masterFolder+"/course_completion.bin";
     
     public void userBlock(User user){
-        Blockchain bc = Blockchain.getInstance( userBlock );
+        
+        Blockchain bc = new Blockchain(userBlock);
         Transaction previousTranxLst = bc.get().getLast().tranxLst;
         Transaction newTranxLst = new Transaction(10);
         if (previousTranxLst != null) {
@@ -29,9 +33,25 @@ public class BlockLogic {
             }
         }
         String serializedUser = user.toString();
-        System.out.println(serializedUser);
         newTranxLst.add(serializedUser);
-        System.out.println(newTranxLst + "hehe");
+        String previousHash = bc.get().getLast().getBlockHeader().getCurrentHash();
+        Block b1 = new Block(bc.get().size(), previousHash);
+        b1.setTranxLst(newTranxLst);
+        bc.nextBlock(b1);
+        bc.distribute();
+    }
+    
+    public void courseBlock(Completion c){
+        Blockchain bc = new Blockchain(courseBlock);
+        Transaction previousTranxLst = bc.get().getLast().tranxLst;
+        Transaction newTranxLst = new Transaction(10);
+        if (previousTranxLst != null) {
+            for (String t : previousTranxLst.getDataLst()) {
+                newTranxLst.add(t);
+            }
+        }
+        String serializedUser = c.toString();
+        newTranxLst.add(serializedUser);
         String previousHash = bc.get().getLast().getBlockHeader().getCurrentHash();
         Block b1 = new Block(bc.get().size(), previousHash);
         b1.setTranxLst(newTranxLst);
@@ -64,7 +84,7 @@ public class BlockLogic {
 
     
     public void updateData(String id, String newData) {
-        Blockchain bc = Blockchain.getInstance(userBlock);
+        Blockchain bc = new Blockchain(userBlock);
         Block lastBlock = bc.get().getLast();
         Transaction tranxLst = lastBlock.getTranxLst();
 
@@ -83,18 +103,19 @@ public class BlockLogic {
             tranxLst.getDataLst().set(index, updatedData);
 
             // Create a new block with the updated transaction list
-            Block newBlock = new Block(lastBlock.getBlockHeader().getIndex() + 1, lastBlock.getBlockHeader().getPreviousHash());
+            Block newBlock = new Block(lastBlock.getBlockHeader().getIndex() + 1, lastBlock.getBlockHeader().getCurrentHash());
             newBlock.setTranxLst(tranxLst);
 
             // Add the new block to the blockchain
             bc.nextBlock(newBlock);
-       }
+        }
         bc.distribute();
     }
 
+
     
     public void certBlock(){
-        Blockchain bc = Blockchain.getInstance( certBlock );
+        Blockchain bc = new Blockchain(certBlock);
         Transaction previousTranxLst = bc.get().getLast().tranxLst;
         Transaction newTranxLst = new Transaction(10);
         if (previousTranxLst != null) {

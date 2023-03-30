@@ -20,6 +20,8 @@ public class Course implements Serializable {
     private String answer2;
     private String answer3;
     private String answer4;
+    
+    private String studentName;
 
     // Constructor
     public Course(String ID, String courseName, String passingGrade, String explanation, String question, String answer1, String answer2, String answer3, String answer4) {
@@ -32,6 +34,10 @@ public class Course implements Serializable {
         this.answer2 = answer2;
         this.answer3 = answer3;
         this.answer4 = answer4;
+    }
+    
+    public void courseCompletion(String studentName){
+        
     }
 
     public String getID(){

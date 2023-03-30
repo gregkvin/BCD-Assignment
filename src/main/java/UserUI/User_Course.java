@@ -6,14 +6,20 @@
 package UserUI;
 
 import AdminUI.*;
+import Blockchain.BlockLogic;
+import Class.Completion;
 import Class.Course;
+import Class.User;
 import LoginUI.Login;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
@@ -28,10 +34,15 @@ import javax.swing.table.DefaultTableModel;
  */
 public class User_Course extends javax.swing.JFrame {
     
-    public User_Course(Course c) throws IOException {
+    private User user;
+    private Course c;
+    
+    public User_Course(Course c, User user) throws IOException {
         initComponents();
         explanation.setLineWrap(true);
         explanation.setWrapStyleWord(true);
+        this.user = user;
+        this.c = c;
         loadtable(c);
         setResizable(false);
 
@@ -189,7 +200,7 @@ public class User_Course extends javax.swing.JFrame {
 
         jButton3.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
         jButton3.setForeground(new java.awt.Color(0, 102, 1));
-        jButton3.setText("Next");
+        jButton3.setText("Submit");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -388,7 +399,32 @@ public class User_Course extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-
+        int index = answer.getSelectedIndex();
+        String grade = "";
+        switch (index) {
+            case 0 -> {
+                grade = "50";
+            }
+            case 1 -> {
+                grade = "75";
+            }
+            case 2 -> {
+                grade = "100";
+            }
+            case 3 -> {
+                grade = "25";
+            }
+        }
+        System.out.println(grade);
+        
+        UUID uuid = UUID.randomUUID();
+        String randomId = uuid.toString();
+        String currentDate = new SimpleDateFormat("yyyy/MM/dd").format(Calendar.getInstance().getTime());
+        System.out.println(currentDate);
+        
+        BlockLogic cb = new BlockLogic();
+        Completion completion = new Completion(randomId, user.getFullName(), c.getCourseName(), currentDate, "Unapproved");
+        cb.courseBlock(completion);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

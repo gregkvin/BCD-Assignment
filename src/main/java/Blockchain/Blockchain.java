@@ -18,12 +18,12 @@ import com.google.gson.GsonBuilder;
 
 public class Blockchain {
     private static LinkedList<Block> db = new LinkedList<>();
-    private static Blockchain _instance;
-    public static Blockchain getInstance( String chainFile ) {
-        if(_instance == null)
-            _instance = new Blockchain( chainFile );
-        return _instance;
-    }
+//    private static Blockchain _instance;
+//    public static Blockchain getInstance( String chainFile ) {
+//        if(_instance == null)
+//            _instance = new Blockchain( chainFile );
+//        return _instance;
+//    }
     
     public String chainFile;
     public Blockchain(String chainFile) {

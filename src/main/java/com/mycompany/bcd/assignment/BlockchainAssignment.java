@@ -7,6 +7,7 @@ package com.mycompany.bcd.assignment;
 
 import Blockchain.Blockchain;
 import static Blockchain.BlockLogic.certBlock;
+import static Blockchain.BlockLogic.courseBlock;
 import static Blockchain.BlockLogic.masterFolder;
 import static Blockchain.BlockLogic.userBlock;
 import LoginUI.MainMenu;
@@ -24,8 +25,9 @@ public class BlockchainAssignment {
      */
     public static void main(String[] args) {
         
-        Blockchain bc = Blockchain.getInstance( userBlock );
-        Blockchain bc2 = Blockchain.getInstance( certBlock );
+        Blockchain bc = new Blockchain(userBlock);
+        Blockchain bc2 = new Blockchain(certBlock);
+        Blockchain bc3 = new Blockchain(courseBlock);
         String chain = new GsonBuilder().setPrettyPrinting().create().toJson(userBlock);
         System.out.println(chain);
         if ( !new File(masterFolder).exists() ) {
@@ -33,6 +35,7 @@ public class BlockchainAssignment {
             new File(masterFolder).mkdir();
             bc.genesis();
             bc2.genesis();
+            bc3.genesis();
         }
         
         MainMenu form = new MainMenu();

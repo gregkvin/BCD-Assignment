@@ -258,7 +258,7 @@ public class User_Menu extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             dispose();
-            new Course_Content().setVisible(true);
+            new Course_Content(user).setVisible(true);
         } catch (IOException ex) {
             Logger.getLogger(User_Menu.class.getName()).log(Level.SEVERE, null, ex);
         }

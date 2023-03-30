@@ -7,6 +7,7 @@ package UserUI;
 
 import AdminUI.*;
 import Class.Course;
+import Class.User;
 import Cryptography.Symmetric;
 import LoginUI.Login;
 import com.mycompany.bcd.assignment.FileHandle;
@@ -39,6 +40,7 @@ public class Course_Content extends javax.swing.JFrame {
     FileHandle fh = new FileHandle();
     CourseRecord cr = new CourseRecord();
     String path = "course.txt";
+    private User user;
     
     class HeaderRenderer extends JLabel implements TableCellRenderer {
 
@@ -65,8 +67,9 @@ public class Course_Content extends javax.swing.JFrame {
         }
     }
 
-    public Course_Content() throws IOException {
+    public Course_Content(User user) throws IOException {
         initComponents();
+        this.user = user;
         loadtable();
         setResizable(false);
         jTable1.getTableHeader().setDefaultRenderer(new HeaderRenderer());
@@ -425,7 +428,7 @@ public class Course_Content extends javax.swing.JFrame {
                 // Do whatever you want with the Course object here
                 System.out.println(c.toString());
                 dispose();
-                new User_Course(c).setVisible(true);
+                new User_Course(c, user).setVisible(true);
 
             } catch (Exception ex) {
                 // Handle exceptions if needed
